@@ -190,62 +190,60 @@ button {
   display: none !important;
 }
 
-/* ---------- Hero section (root view) ---------- */
-.hero {
+/* ---------- Hero Section (landing page style) ---------- */
+.hero-section {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: var(--space-8) var(--space-5) var(--space-7);
-  margin-bottom: var(--space-5);
+  padding: 80px 20px 48px;
+  margin-bottom: 8px;
+  animation: fadeInUp 0.5s ease-out;
 }
 
-.hero-brand-mark {
-  width: 88px;
-  height: 88px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--radius-xl);
-  background: linear-gradient(135deg, var(--primary), var(--accent));
-  font-size: 44px;
-  box-shadow: 0 20px 50px rgba(var(--primary-rgb), 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.2);
-  margin-bottom: var(--space-5);
-}
-
-.hero-name {
-  font-size: 32px;
+.hero-title {
+  font-size: 42px;
   font-weight: 800;
-  letter-spacing: -0.02em;
-  color: var(--text);
-  margin-bottom: var(--space-2);
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 16px;
+  line-height: 1.1;
 }
 
-.hero-tagline {
-  font-size: 15px;
+.hero-subtitle {
+  font-size: 18px;
   color: var(--muted);
-  font-weight: 500;
-  max-width: 480px;
+  max-width: 560px;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+.content-section {
+  padding: 0 0 24px;
+  animation: fadeInUp 0.4s ease-out 0.1s both;
 }
 
 @media (max-width: 768px) {
-  .hero {
-    padding: var(--space-7) var(--space-4) var(--space-5);
+  .hero-section {
+    padding: 48px 16px 32px;
   }
 
-  .hero-brand-mark {
-    width: 72px;
-    height: 72px;
-    font-size: 36px;
+  .hero-title {
+    font-size: 30px;
   }
 
-  .hero-name {
+  .hero-subtitle {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-title {
     font-size: 26px;
-  }
-
-  .hero-tagline {
-    font-size: 13px;
   }
 }
 

@@ -18,6 +18,10 @@ window.MYDRIVE_VIDEOS = {
    */
   rootFolder: "X",
 
+  // Hero section (homepage) — edit dari admin dashboard Settings page
+  hero_title: "Stream. Watch. Enjoy.",
+  hero_subtitle: "HD video streaming, completely free. Watch premium content anytime, anywhere.",
+
   /**
    * Daftar nama subfolder.
    * Tambah/hapus sesuka hati — video akan dibagi merata ke semua folder ini.

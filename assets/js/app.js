@@ -794,51 +794,56 @@
   function renderRoot() {
     let folders = state.data.folders || [];
     const cfg = state.config;
+    const vcfg = window.MYDRIVE_VIDEOS || {};
 
-    // SEO
-    // Title: default site title
+    // Title
     const siteName = cfg.site.name || (window.location.hostname ? window.location.hostname.split('.')[0] : 'MyDrive');
     document.title = `${siteName} | Streaming HD Free`;
-    setMeta('description', cfg.seo.description);
-    setMeta('og:title', cfg.site.name, true);
 
     // Breadcrumb
-    renderBreadcrumb([{ label: cfg.site.name, href: '#/' }]);
+    renderBreadcrumb([{ label: siteName, href: '/' }]);
 
-    // Home mode: center brand, hide search & sort (clean look)
+    // Home mode: center brand, hide search
     els.topbar.classList.add('home-mode');
     els.searchBox.hidden = true;
     els.sortBox.hidden = true;
 
-    // Filter folders by search query (matches folder name, description, or any file/subfolder name inside)
+    // Hero section (landing page style)
+    const heroTitle = vcfg.hero_title || 'Stream. Watch. Enjoy.';
+    const heroSubtitle = vcfg.hero_subtitle || 'HD video streaming, completely free. Watch premium content anytime, anywhere.';
+
+    // Filter + sort folders
     if (state.searchQuery) {
       const q = state.searchQuery.toLowerCase();
       folders = folders.filter(f => folderMatchesQuery(f, q));
     }
-
-    // Sort folders
     folders = sortFolders(folders, state.sortBy);
 
+    let html = `
+      <section class="hero-section">
+        <h1 class="hero-title">${utils.esc(heroTitle)}</h1>
+        <p class="hero-subtitle">${utils.esc(heroSubtitle)}</p>
+      </section>
+    `;
+
     if (folders.length === 0) {
-      const isSearching = !!state.searchQuery;
-      els.app.innerHTML = `
+      html += `
         <div class="empty-state">
-          <div class="empty-state-icon">${isSearching ? '🔍' : '📁'}</div>
-          <div class="empty-state-title">${isSearching ? 'Tidak ada hasil' : 'Belum ada folder'}</div>
-          <div class="empty-state-text">${isSearching ? `Tidak ditemukan folder/file untuk "<strong>${utils.esc(state.searchQuery)}</strong>"` : 'Tambahkan data folder di <code>data/content.json</code> untuk mulai menampilkan konten.'}</div>
+          <div class="empty-state-icon">📁</div>
+          <div class="empty-state-title">No content yet</div>
+          <div class="empty-state-text">Add folders and videos via the admin dashboard.</div>
         </div>`;
-      return;
+    } else {
+      html += `
+        <section class="content-section">
+          <div class="folder-grid">
+            ${folders.map(f => renderFolderCard(f)).join('')}
+          </div>
+        </section>
+      `;
     }
 
-    els.app.innerHTML = `
-      <h2 class="section-title">
-        <span>Folder</span>
-        <span class="count">${folders.length} folder</span>
-      </h2>
-      <div class="folder-grid">
-        ${folders.map(f => renderFolderCard(f)).join('')}
-      </div>
-    `;
+    els.app.innerHTML = html;
   }
 
   function renderFolderCard(folder, parentSlug) {
