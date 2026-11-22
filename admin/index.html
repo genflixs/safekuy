@@ -1,0 +1,1500 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0a0f">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Dashboard</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.svg">
+  <link rel="stylesheet" href="/assets/css/style.css?v=16">
+  <script src="/assets/js/config.js?v=16" defer></script>
+  <script src="/assets/js/config-videos.js?v=16" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+      background: #06060a;
+      color: #f7f7fb;
+      min-height: 100vh;
+    }
+    :root {
+      --pink: #fe6081;
+      --pink-hover: #ff7a96;
+      --surface: #131419;
+      --surface-2: #1a1c23;
+      --surface-3: #232631;
+      --border: #2a2d38;
+      --muted: #a8a8b6;
+      --muted-2: #6b6b78;
+      --text: #f7f7fb;
+      --text-2: #d4d4dc;
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.1);
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.1);
+      --radius: 12px;
+      --radius-sm: 8px;
+      --radius-lg: 18px;
+    }
+
+    /* ---------- Login Screen ---------- */
+    .login-screen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .login-card {
+      width: 100%;
+      max-width: 400px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 40px 32px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .login-logo {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--pink), #fbbf24);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      box-shadow: 0 10px 30px rgba(254,96,129,0.35);
+    }
+    .login-logo svg { width: 28px; height: 28px; color: #fff; fill: #fff; }
+    .login-title {
+      text-align: center;
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .login-subtitle {
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 28px;
+    }
+    .form-group { margin-bottom: 18px; }
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text-2);
+    }
+    .form-input {
+      width: 100%;
+      height: 44px;
+      padding: 0 14px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-size: 14px;
+      transition: border-color 0.15s;
+      outline: none;
+    }
+    .form-input:focus { border-color: var(--pink); }
+    .btn-primary {
+      width: 100%;
+      height: 44px;
+      background: var(--pink);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-primary:hover { background: var(--pink-hover); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+    .login-error {
+      background: var(--danger-bg);
+      border: 1px solid rgba(239,68,68,0.3);
+      color: #fca5a5;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      margin-bottom: 16px;
+      display: none;
+    }
+    .login-error.show { display: block; }
+
+    /* ---------- Dashboard ---------- */
+    .dashboard { display: none; min-height: 100vh; }
+    .dashboard.show { display: block; }
+
+    .dash-header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(12px);
+    }
+    .dash-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 17px;
+      font-weight: 700;
+    }
+    .dash-brand-logo {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--pink), #fbbf24);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .dash-brand-logo svg { width: 18px; height: 18px; color: #fff; fill: #fff; }
+    .dash-header-actions { margin-left: auto; display: flex; gap: 8px; }
+    .btn-ghost {
+      height: 36px;
+      padding: 0 16px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-2);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: border-color 0.15s;
+    }
+    .btn-ghost:hover { border-color: var(--pink); }
+    .btn-danger {
+      background: var(--danger-bg);
+      border-color: rgba(239,68,68,0.3);
+      color: #fca5a5;
+    }
+    .btn-danger:hover { background: rgba(239,68,68,0.2); border-color: var(--danger); }
+
+    .dash-body { display: flex; max-width: 1200px; margin: 0 auto; gap: 0; min-height: calc(100vh - 62px); }
+    .dash-sidebar {
+      width: 220px;
+      border-right: 1px solid var(--border);
+      padding: 20px 12px;
+      flex-shrink: 0;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-bottom: 4px;
+      transition: all 0.15s;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+    }
+    .nav-item:hover { background: var(--surface-2); color: var(--text); }
+    .nav-item.active { background: rgba(254,96,129,0.12); color: var(--pink); }
+    .nav-item svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+    .dash-content { flex: 1; padding: 28px 32px; min-width: 0; }
+    .dash-page { display: none; }
+    .dash-page.show { display: block; }
+    .page-title { font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+    .page-desc { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
+
+    /* Stats */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-bottom: 28px; }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+    .stat-label { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+    .stat-value { font-size: 32px; font-weight: 700; }
+    .stat-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(254,96,129,0.12); color: var(--pink);
+      margin-bottom: 12px;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+    .card-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .card-title { font-size: 16px; font-weight: 600; }
+    .card-body { padding: 20px; }
+
+    /* Add form */
+    .add-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 10px;
+      align-items: end;
+    }
+    .add-form-full { grid-template-columns: 1fr 1fr 1fr auto; }
+    .add-form .form-group { margin-bottom: 0; }
+
+    /* Table */
+    .data-table { width: 100%; border-collapse: collapse; }
+    .data-table th {
+      text-align: left;
+      padding: 10px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border);
+    }
+    .data-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:hover td { background: var(--surface-2); }
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      background: rgba(254,96,129,0.12);
+      color: var(--pink);
+    }
+    .btn-icon {
+      width: 32px; height: 32px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      color: var(--muted);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+    .btn-icon:hover { color: var(--text); border-color: var(--text-2); }
+    .btn-icon.danger:hover { color: var(--danger); border-color: var(--danger); }
+    .btn-icon svg { width: 16px; height: 16px; }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      padding: 14px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      z-index: 999;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { background: var(--success-bg); border: 1px solid rgba(16,185,129,0.3); color: #6ee7b7; }
+    .toast.error { background: var(--danger-bg); border: 1px solid rgba(239,68,68,0.3); color: #fca5a5; }
+
+    .empty-row td { text-align: center; color: var(--muted-2); padding: 32px; }
+
+    /* Setup notice */
+    .setup-notice {
+      max-width: 600px;
+      margin: 60px auto;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+    }
+    .setup-notice h2 { font-size: 20px; margin-bottom: 12px; }
+    .setup-notice p { color: var(--muted); font-size: 14px; line-height: 1.6; margin-bottom: 16px; }
+    .setup-notice code {
+      background: var(--surface-2);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: var(--pink);
+    }
+    .setup-notice pre {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      overflow-x: auto;
+      font-size: 12px;
+      line-height: 1.5;
+      margin: 12px 0;
+    }
+
+    @media (max-width: 768px) {
+      .dash-body { flex-direction: column; }
+      .dash-sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border); display: flex; gap: 4px; padding: 12px; overflow-x: auto; }
+      .nav-item { white-space: nowrap; }
+      .dash-content { padding: 20px 16px; }
+      .add-form, .add-form-full { grid-template-columns: 1fr; }
+    }
+
+    /* ---------- Animations ---------- */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .card {
+      animation: fadeInUp 0.3s ease-out;
+    }
+    .dash-page.show {
+      animation: fadeIn 0.2s ease-out;
+    }
+    .stat-card {
+      animation: fadeInUp 0.4s ease-out;
+    }
+    .stat-card:nth-child(2) { animation-delay: 0.05s; }
+    .stat-card:nth-child(3) { animation-delay: 0.1s; }
+    .data-table tr {
+      animation: fadeIn 0.2s ease-out;
+    }
+    .login-card {
+      animation: fadeInUp 0.4s ease-out;
+    }
+    .toast {
+      animation: slideInRight 0.3s ease-out;
+    }
+    .btn-primary {
+      transition: transform 0.1s ease, background 0.15s ease;
+    }
+    .btn-primary:active {
+      transform: scale(0.97);
+    }
+    .nav-item {
+      transition: all 0.15s ease;
+    }
+    .nav-item:active {
+      transform: scale(0.96);
+    }
+  </style>
+</head>
+<body>
+
+<!-- Login Screen -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">
+      <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+    </div>
+    <div class="login-title">Dashboard</div>
+    <div class="login-subtitle">Sign in to manage your content</div>
+    <div class="login-error" id="loginError"></div>
+    <form id="loginForm">
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" id="loginEmail" required autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-input" id="loginPassword" required autocomplete="current-password">
+      </div>
+      <button type="submit" class="btn-primary" id="loginBtn">Sign In</button>
+    </form>
+  </div>
+</div>
+
+<!-- Setup Notice (shown if Supabase not configured) -->
+<div class="login-screen" id="setupNotice" style="display:none;">
+  <div class="setup-notice">
+    <h2>Setup Required</h2>
+    <p>To use the dashboard, you need to configure Supabase in <code>/assets/js/config-videos.js</code>:</p>
+    <pre>supabase: {
+  enabled: true,
+  url: "https://your-project.supabase.co",
+  anonKey: "your-anon-key-here",
+}</pre>
+    <p>Then create the database tables by running this SQL in Supabase SQL Editor:</p>
+    <pre>CREATE TABLE folders (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  parent_id TEXT,
+  sort_order INTEGER DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE videos (
+  id TEXT PRIMARY KEY,
+  folder_id TEXT NOT NULL,
+  name TEXT,
+  url TEXT NOT NULL,
+  sort_order INTEGER DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE folders ENABLE ROW LEVEL SECURITY;
+ALTER TABLE videos ENABLE ROW LEVEL SECURITY;
+
+GRANT ALL ON folders TO authenticated;
+GRANT ALL ON videos TO authenticated;
+GRANT SELECT ON folders TO anon;
+GRANT SELECT ON videos TO anon;
+
+CREATE POLICY "Public read folders" ON folders FOR SELECT TO anon, authenticated USING (true);
+CREATE POLICY "Public read videos" ON videos FOR SELECT TO anon, authenticated USING (true);
+CREATE POLICY "Admin all folders" ON folders FOR ALL TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Admin all videos" ON videos FOR ALL TO authenticated USING (true) WITH CHECK (true);</pre>
+    <p>After that, create an admin user in <strong>Authentication → Users → Add user</strong>, then reload this page.</p>
+  </div>
+</div>
+
+<!-- Dashboard -->
+<div class="dashboard" id="dashboard">
+  <header class="dash-header">
+    <div class="dash-brand">
+      <div class="dash-brand-logo">
+        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </div>
+      <span>Dashboard</span>
+    </div>
+    <div class="dash-header-actions">
+      <a href="/" class="btn-ghost" target="_blank">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        View Site
+      </a>
+      <button class="btn-ghost btn-danger" id="signoutBtn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sign Out
+      </button>
+    </div>
+  </header>
+
+  <div class="dash-body">
+    <nav class="dash-sidebar">
+      <button class="nav-item active" data-page="overview">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Overview
+      </button>
+      <button class="nav-item" data-page="folders">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        Folders
+      </button>
+      <button class="nav-item" data-page="videos">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+        Videos
+      </button>
+      <button class="nav-item" data-page="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Settings
+      </button>
+    </nav>
+
+    <main class="dash-content">
+      <!-- Overview Page -->
+      <div class="dash-page show" id="page-overview">
+        <h1 class="page-title">Overview</h1>
+        <p class="page-desc">Summary of your content</p>
+        <div class="stats-grid" id="statsGrid"></div>
+      </div>
+
+      <!-- Folders Page -->
+      <div class="dash-page" id="page-folders">
+        <h1 class="page-title">Folders</h1>
+        <p class="page-desc">Manage your folder structure</p>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Add New Folder</span>
+          </div>
+          <div class="card-body">
+            <form class="add-form" id="addFolderForm">
+              <div class="form-group">
+                <label class="form-label">Folder Name</label>
+                <input type="text" class="form-input" id="folderName" placeholder="e.g., Animations" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Parent Folder (optional)</label>
+                <select class="form-input" id="folderParent">
+                  <option value="">— Root —</option>
+                </select>
+              </div>
+              <button type="submit" class="btn-primary" style="width:auto; padding:0 24px;">Add</button>
+            </form>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">All Folders</span>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="data-table" id="foldersTable">
+              <thead>
+                <tr><th>Name</th><th>Parent</th><th>Videos</th><th>Actions</th></tr>
+              </thead>
+              <tbody id="foldersBody"></tbody>
+            </table>
+          </div>
+        </div>
+        <!-- Bulk Add Folders -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Bulk Add Folders</span>
+          </div>
+          <div class="card-body">
+            <p style="color:var(--muted);font-size:13px;margin-bottom:12px;">Paste folder names (one per line). All will be created under the selected parent.</p>
+            <form id="bulkFolderForm">
+              <div class="form-group" style="margin-bottom:12px;">
+                <label class="form-label">Parent Folder (optional)</label>
+                <select class="form-input" id="bulkFolderParent">
+                  <option value="">— Root —</option>
+                </select>
+              </div>
+              <div class="form-group" style="margin-bottom:12px;">
+                <label class="form-label">Folder Names (one per line)</label>
+                <textarea class="form-input" id="bulkFolderNames" rows="6" style="height:auto;resize:vertical;font-family:monospace;font-size:13px;" placeholder="Folder A&#10;Folder B&#10;Folder C"></textarea>
+              </div>
+              <button type="submit" class="btn-primary" style="width:auto;padding:0 24px;">Bulk Add Folders</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Videos Page -->
+      <div class="dash-page" id="page-videos">
+        <h1 class="page-title">Videos</h1>
+        <p class="page-desc">Manage your video content</p>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Add New Video</span>
+          </div>
+          <div class="card-body">
+            <form class="add-form add-form-full" id="addVideoForm">
+              <div class="form-group">
+                <label class="form-label">Video Name (optional)</label>
+                <input type="text" class="form-input" id="videoName" placeholder="e.g., Tutorial 1">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Video URL</label>
+                <input type="url" class="form-input" id="videoUrl" placeholder="https://cdn.example.com/video.mp4" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Folder</label>
+                <select class="form-input" id="videoFolder" required></select>
+              </div>
+              <button type="submit" class="btn-primary" style="width:auto; padding:0 24px;">Add</button>
+            </form>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">All Videos</span>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="data-table" id="videosTable">
+              <thead>
+                <tr><th>Name</th><th>Folder</th><th>URL</th><th>Actions</th></tr>
+              </thead>
+              <tbody id="videosBody"></tbody>
+            </table>
+          </div>
+        </div>
+        <!-- Bulk Add Videos -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Bulk Add Videos</span>
+          </div>
+          <div class="card-body">
+            <p style="color:var(--muted);font-size:13px;margin-bottom:12px;">Paste video URLs (one per line). All will be added to the selected folder. Names auto-extracted from URL.</p>
+            <form id="bulkVideoForm">
+              <div class="form-group" style="margin-bottom:12px;">
+                <label class="form-label">Target Folder</label>
+                <select class="form-input" id="bulkVideoFolder" required></select>
+              </div>
+              <div class="form-group" style="margin-bottom:12px;">
+                <label class="form-label">Video URLs (one per line)</label>
+                <textarea class="form-input" id="bulkVideoUrls" rows="8" style="height:auto;resize:vertical;font-family:monospace;font-size:12px;" placeholder="https://cdn.example.com/video1.mp4&#10;https://cdn.example.com/video2.mp4&#10;https://cdn.example.com/video3.mp4"></textarea>
+              </div>
+              <button type="submit" class="btn-primary" style="width:auto;padding:0 24px;">Bulk Add Videos</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Page -->
+      <div class="dash-page" id="page-settings">
+        <h1 class="page-title">Settings</h1>
+        <p class="page-desc">Manage all site settings in one place. Changes are live.</p>
+
+        <!-- Site Identity -->
+        <div class="card">
+          <div class="card-header"><span class="card-title">Site Identity</span></div>
+          <div class="card-body">
+            <div class="form-group" style="margin-bottom: 16px;">
+              <label class="form-label">Site Name (Root Folder Name)</label>
+              <input type="text" class="form-input" id="set_site_name" placeholder="X">
+            </div>
+          </div>
+        </div>
+
+        <!-- Smartlink -->
+        <div class="card">
+          <div class="card-header"><span class="card-title">Smartlink (Continue Button)</span></div>
+          <div class="card-body">
+            <div class="form-group" style="margin-bottom: 16px;">
+              <label class="form-label">Smartlink URL</label>
+              <input type="url" class="form-input" id="set_smartlink" placeholder="https://uplcm.com/...">
+            </div>
+            <div class="form-group" style="margin-bottom: 16px;">
+              <label class="form-label">Auto-Pause Enabled</label>
+              <select class="form-input" id="set_auto_pause_enabled">
+                <option value="true">Enabled</option>
+                <option value="false">Disabled</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom: 16px;">
+              <label class="form-label">Auto-Pause Count (how many times to pause)</label>
+              <input type="number" class="form-input" id="set_auto_pause_count" min="1" max="10" value="2">
+            </div>
+          </div>
+        </div>
+
+        <!-- Telegram -->
+        <div class="card">
+          <div class="card-header"><span class="card-title">Telegram (Floating Button)</span></div>
+          <div class="card-body">
+            <div class="form-group" style="margin-bottom: 16px;">
+              <label class="form-label">Telegram URL</label>
+              <input type="url" class="form-input" id="set_telegram_url" placeholder="https://t.me/yourchannel">
+            </div>
+            <div class="form-group" style="margin-bottom: 16px;">
+              <label class="form-label">Button Text</label>
+              <input type="text" class="form-input" id="set_telegram_text" placeholder="Join Private">
+            </div>
+            <div class="form-group" style="margin-bottom: 16px;">
+              <label class="form-label">Telegram Button Enabled</label>
+              <select class="form-input" id="set_telegram_enabled">
+                <option value="true">Enabled</option>
+                <option value="false">Disabled</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Popup Ad -->
+        <div class="card">
+          <div class="card-header"><span class="card-title">Popup Ad (Montag)</span></div>
+          <div class="card-body">
+            <div class="form-group" style="margin-bottom: 16px;">
+              <label class="form-label">Popup Ad Enabled</label>
+              <select class="form-input" id="set_popup_ad_enabled">
+                <option value="true">Enabled</option>
+                <option value="false">Disabled</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom: 16px;">
+              <label class="form-label">Zone ID</label>
+              <input type="text" class="form-input" id="set_popup_ad_zone" placeholder="12318898">
+            </div>
+            <div class="form-group" style="margin-bottom: 16px;">
+              <label class="form-label">Script URL</label>
+              <input type="url" class="form-input" id="set_popup_ad_src" placeholder="https://al5sm.com/tag.min.js">
+            </div>
+          </div>
+        </div>
+
+        <!-- Histats -->
+        <div class="card">
+          <div class="card-header"><span class="card-title">Histats Tracking</span></div>
+          <div class="card-body">
+            <div class="form-group" style="margin-bottom: 16px;">
+              <label class="form-label">Histats Enabled</label>
+              <select class="form-input" id="set_histats_enabled">
+                <option value="true">Enabled</option>
+                <option value="false">Disabled</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom: 16px;">
+              <label class="form-label">Histats ID</label>
+              <input type="text" class="form-input" id="set_histats_id" placeholder="5053132">
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-primary" style="width:auto; padding:0 32px; margin-top: 8px;" id="saveSettingsBtn">Save All Settings</button>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function() {
+  'use strict';
+  let supabaseClient = null;
+  let allFolders = [];
+  let allVideos = [];
+  let dbMode = 'supabase'; // 'supabase' or 'mysql'
+  let mysqlApiUrl = '';
+
+  // Wait for config to load
+  function init() {
+    const vcfg = window.MYDRIVE_VIDEOS || {};
+    dbMode = vcfg.databaseType || 'supabase';
+    mysqlApiUrl = (vcfg.mysql && vcfg.mysql.apiUrl) || '';
+
+    // MySQL mode — simple password login
+    if (dbMode === 'mysql' && mysqlApiUrl) {
+      // Update login UI for MySQL (hide email field, show password only)
+      const emailGroup = document.getElementById('loginEmail')?.closest('.form-group');
+      if (emailGroup) emailGroup.style.display = 'none';
+      const subtitle = document.querySelector('.login-subtitle');
+      if (subtitle) subtitle.textContent = 'Enter your admin password';
+
+      // Check if already logged in
+      fetch(`${mysqlApiUrl}?action=check`)
+        .then(r => r.json())
+        .then(data => {
+          if (data.logged_in) {
+            showDashboard();
+          } else {
+            showLogin();
+          }
+        })
+        .catch(() => showLogin());
+
+      document.getElementById('loginForm').addEventListener('submit', handleMySQLLogin);
+      document.getElementById('signoutBtn').addEventListener('click', handleMySQLSignout);
+      document.querySelectorAll('.nav-item').forEach(btn => {
+        btn.addEventListener('click', () => switchPage(btn.dataset.page));
+      });
+      document.getElementById('addFolderForm').addEventListener('submit', handleAddFolder);
+      document.getElementById('addVideoForm').addEventListener('submit', handleAddVideo);
+      document.getElementById('bulkFolderForm').addEventListener('submit', handleBulkAddFolders);
+      document.getElementById('bulkVideoForm').addEventListener('submit', handleBulkAddVideos);
+      document.getElementById('saveSettingsBtn').addEventListener('click', handleSaveSettings);
+      return;
+    }
+
+    // Supabase mode (existing code)
+    let supaCfg = vcfg.supabase;
+    if (supaCfg && supaCfg.encoded) {
+      supaCfg = {
+        enabled: supaCfg.enabled,
+        url: atob(supaCfg.url),
+        anonKey: atob(supaCfg.anonKey),
+      };
+    }
+
+    if (!supaCfg || !supaCfg.enabled || !supaCfg.url || !supaCfg.anonKey) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('setupNotice').style.display = 'flex';
+      return;
+    }
+
+    // Create Supabase client
+    supabaseClient = window.supabase.createClient(supaCfg.url, supaCfg.anonKey);
+
+    // Check existing session (simplified — no onAuthStateChange to avoid reload loops)
+    supabaseClient.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        showDashboard();
+      } else {
+        showLogin();
+      }
+    }).catch(() => {
+      showLogin();
+    });
+
+    // Login form
+    document.getElementById('loginForm').addEventListener('submit', handleLogin);
+    // Signout
+    document.getElementById('signoutBtn').addEventListener('click', handleSignout);
+    // Nav items
+    document.querySelectorAll('.nav-item').forEach(btn => {
+      btn.addEventListener('click', () => switchPage(btn.dataset.page));
+    });
+    // Add forms
+    document.getElementById('addFolderForm').addEventListener('submit', handleAddFolder);
+    document.getElementById('addVideoForm').addEventListener('submit', handleAddVideo);
+    // Bulk forms
+    document.getElementById('bulkFolderForm').addEventListener('submit', handleBulkAddFolders);
+    document.getElementById('bulkVideoForm').addEventListener('submit', handleBulkAddVideos);
+    // Settings save
+    document.getElementById('saveSettingsBtn').addEventListener('click', handleSaveSettings);
+  }
+
+  function showLogin() {
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('dashboard').classList.remove('show');
+    document.getElementById('setupNotice').style.display = 'none';
+  }
+
+  function showDashboard() {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('setupNotice').style.display = 'none';
+    document.getElementById('dashboard').classList.add('show');
+    loadData();
+    loadSettings();
+  }
+
+  async function handleLogin(e) {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    const errEl = document.getElementById('loginError');
+    const btn = document.getElementById('loginBtn');
+
+    errEl.classList.remove('show');
+    btn.disabled = true;
+    btn.textContent = 'Signing in...';
+
+    try {
+      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      // Manually switch to dashboard (don't rely on onAuthStateChange)
+      showDashboard();
+    } catch (err) {
+      errEl.textContent = err.message || 'Login failed';
+      errEl.classList.add('show');
+      btn.disabled = false;
+      btn.textContent = 'Sign In';
+    }
+  }
+
+  async function handleSignout() {
+    try {
+      await supabaseClient.auth.signOut();
+    } catch {}
+    // Manually switch to login
+    showLogin();
+  }
+
+  function switchPage(page) {
+    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+    document.querySelector(`.nav-item[data-page="${page}"]`).classList.add('active');
+    document.querySelectorAll('.dash-page').forEach(p => p.classList.remove('show'));
+    document.getElementById(`page-${page}`).classList.add('show');
+  }
+
+  // ---------- Data CRUD ----------
+  async function loadData() {
+    await Promise.all([loadFolders(), loadVideos()]);
+    updateStats();
+  }
+
+  async function loadFolders() {
+    try {
+      const { data, error } = await supabaseClient
+        .from('folders')
+        .select('*')
+        .order('sort_order', { ascending: true });
+      if (error) throw error;
+      allFolders = data || [];
+      renderFolders();
+      populateFolderSelects();
+    } catch (err) {
+      showToast('Error loading folders: ' + err.message, 'error');
+    }
+  }
+
+  async function loadVideos() {
+    try {
+      const { data, error } = await supabaseClient
+        .from('videos')
+        .select('*')
+        .order('sort_order', { ascending: true });
+      if (error) throw error;
+      allVideos = data || [];
+      renderVideos();
+    } catch (err) {
+      showToast('Error loading videos: ' + err.message, 'error');
+    }
+  }
+
+  function renderFolders() {
+    const tbody = document.getElementById('foldersBody');
+    if (!allFolders.length) {
+      tbody.innerHTML = '<tr class="empty-row"><td colspan="4">No folders yet. Add one above.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = allFolders.map(f => {
+      const parent = allFolders.find(p => p.id === f.parent_id);
+      const videoCount = allVideos.filter(v => v.folder_id === f.id).length;
+      return `<tr>
+        <td><strong>${esc(f.name)}</strong></td>
+        <td>${parent ? esc(parent.name) : '<span class="badge">Root</span>'}</td>
+        <td>${videoCount}</td>
+        <td>
+          <button class="btn-icon danger" onclick="deleteFolder('${esc(f.id)}')" title="Delete">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          </button>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  function renderVideos() {
+    const tbody = document.getElementById('videosBody');
+    if (!allVideos.length) {
+      tbody.innerHTML = '<tr class="empty-row"><td colspan="4">No videos yet. Add one above.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = allVideos.map(v => {
+      const folder = allFolders.find(f => f.id === v.folder_id);
+      const name = v.name || v.url.split('/').pop();
+      const shortUrl = v.url.length > 40 ? v.url.slice(0, 37) + '...' : v.url;
+      return `<tr>
+        <td><strong>${esc(name)}</strong></td>
+        <td>${folder ? esc(folder.name) : '<span style="color:var(--muted-2)">—</span>'}</td>
+        <td><a href="${esc(v.url)}" target="_blank" style="color:var(--pink); font-size:13px;">${esc(shortUrl)}</a></td>
+        <td>
+          <button class="btn-icon danger" onclick="deleteVideo('${esc(v.id)}')" title="Delete">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          </button>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  function populateFolderSelects() {
+    const opts = '<option value="">— Root —</option>' +
+      allFolders.map(f => `<option value="${esc(f.id)}">${esc(f.name)}</option>`).join('');
+    document.getElementById('folderParent').innerHTML = opts;
+    document.getElementById('bulkFolderParent').innerHTML = opts;
+    const videoOpts = allFolders.map(f => `<option value="${esc(f.id)}">${esc(f.name)}</option>`).join('') || '<option value="">No folders available</option>';
+    document.getElementById('videoFolder').innerHTML = videoOpts;
+    document.getElementById('bulkVideoFolder').innerHTML = videoOpts;
+  }
+
+  function updateStats() {
+    const rootFolders = allFolders.filter(f => !f.parent_id).length;
+    const subFolders = allFolders.filter(f => f.parent_id).length;
+    const totalVideos = allVideos.length;
+    document.getElementById('statsGrid').innerHTML = `
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div class="stat-label">Root Folders</div>
+        <div class="stat-value">${rootFolders}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div class="stat-label">Subfolders</div>
+        <div class="stat-value">${subFolders}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+        </div>
+        <div class="stat-label">Total Videos</div>
+        <div class="stat-value">${totalVideos}</div>
+      </div>
+    `;
+  }
+
+  async function handleAddFolder(e) {
+    e.preventDefault();
+    const name = document.getElementById('folderName').value.trim();
+    const parentId = document.getElementById('folderParent').value || null;
+    if (!name) return;
+
+    const id = generateId();
+    try {
+      const { error } = await supabaseClient
+        .from('folders')
+        .insert({ id, name, parent_id: parentId, sort_order: allFolders.length });
+      if (error) throw error;
+      document.getElementById('folderName').value = '';
+      await loadFolders();
+      updateStats();
+      showToast('Folder added successfully', 'success');
+    } catch (err) {
+      showToast('Error: ' + err.message, 'error');
+    }
+  }
+
+  async function handleAddVideo(e) {
+    e.preventDefault();
+    const name = document.getElementById('videoName').value.trim();
+    const url = document.getElementById('videoUrl').value.trim();
+    const folderId = document.getElementById('videoFolder').value;
+    if (!url || !folderId) {
+      showToast('URL and Folder are required', 'error');
+      return;
+    }
+
+    const id = generateId();
+    try {
+      const { error } = await supabaseClient
+        .from('videos')
+        .insert({ id, name: name || null, url, folder_id: folderId, sort_order: allVideos.length });
+      if (error) throw error;
+      document.getElementById('videoName').value = '';
+      document.getElementById('videoUrl').value = '';
+      await loadVideos();
+      updateStats();
+      renderFolders(); // Update video count in folder table
+      showToast('Video added successfully', 'success');
+    } catch (err) {
+      showToast('Error: ' + err.message, 'error');
+    }
+  }
+
+  window.deleteFolder = async function(id) {
+    if (!confirm('Delete this folder? Videos inside will also be deleted.')) return;
+    try {
+      // Delete videos in this folder first
+      await supabaseClient.from('videos').delete().eq('folder_id', id);
+      // Delete the folder
+      const { error } = await supabaseClient.from('folders').delete().eq('id', id);
+      if (error) throw error;
+      await loadData();
+      showToast('Folder deleted', 'success');
+    } catch (err) {
+      showToast('Error: ' + err.message, 'error');
+    }
+  };
+
+  window.deleteVideo = async function(id) {
+    if (!confirm('Delete this video?')) return;
+    try {
+      const { error } = await supabaseClient.from('videos').delete().eq('id', id);
+      if (error) throw error;
+      await loadVideos();
+      renderFolders();
+      updateStats();
+      showToast('Video deleted', 'success');
+    } catch (err) {
+      showToast('Error: ' + err.message, 'error');
+    }
+  };
+
+  // ---------- Bulk Add ----------
+  async function handleBulkAddFolders(e) {
+    e.preventDefault();
+    const parentId = document.getElementById('bulkFolderParent').value || null;
+    const namesText = document.getElementById('bulkFolderNames').value.trim();
+    if (!namesText) { showToast('Please enter folder names', 'error'); return; }
+
+    const names = namesText.split('\n').map(n => n.trim()).filter(Boolean);
+    if (!names.length) { showToast('No valid folder names found', 'error'); return; }
+
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    btn.textContent = `Adding ${names.length} folders...`;
+
+    let success = 0, failed = 0;
+    for (const name of names) {
+      try {
+        const { error } = await supabaseClient
+          .from('folders')
+          .insert({ id: generateId(), name, parent_id: parentId, sort_order: allFolders.length + success });
+        if (error) throw error;
+        success++;
+      } catch (err) {
+        failed++;
+        console.error('Failed to add folder:', name, err);
+      }
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Bulk Add Folders';
+    document.getElementById('bulkFolderNames').value = '';
+    await loadData();
+    showToast(`Added ${success} folders${failed ? `, ${failed} failed` : ''}`, failed ? 'error' : 'success');
+  }
+
+  async function handleBulkAddVideos(e) {
+    e.preventDefault();
+    const folderId = document.getElementById('bulkVideoFolder').value;
+    const urlsText = document.getElementById('bulkVideoUrls').value.trim();
+    if (!folderId) { showToast('Please select a folder', 'error'); return; }
+    if (!urlsText) { showToast('Please enter video URLs', 'error'); return; }
+
+    const urls = urlsText.split('\n').map(u => u.trim()).filter(Boolean);
+    if (!urls.length) { showToast('No valid URLs found', 'error'); return; }
+
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    btn.textContent = `Adding ${urls.length} videos...`;
+
+    let success = 0, failed = 0;
+    for (const url of urls) {
+      try {
+        const name = url.split('/').pop();
+        const { error } = await supabaseClient
+          .from('videos')
+          .insert({ id: generateId(), name, url, folder_id: folderId, sort_order: allVideos.length + success });
+        if (error) throw error;
+        success++;
+      } catch (err) {
+        failed++;
+        console.error('Failed to add video:', url, err);
+      }
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Bulk Add Videos';
+    document.getElementById('bulkVideoUrls').value = '';
+    await loadVideos();
+    renderFolders();
+    updateStats();
+    showToast(`Added ${success} videos${failed ? `, ${failed} failed` : ''}`, failed ? 'error' : 'success');
+  }
+
+  // ---------- Settings ----------
+  const SETTING_KEYS = [
+    'site_name', 'smartlink', 'auto_pause_enabled', 'auto_pause_count',
+    'telegram_url', 'telegram_text', 'telegram_enabled',
+    'popup_ad_enabled', 'popup_ad_zone', 'popup_ad_src',
+    'histats_enabled', 'histats_id',
+  ];
+
+  async function loadSettings() {
+    try {
+      const { data, error } = await supabaseClient
+        .from('settings')
+        .select('key, value');
+      if (error) throw error;
+
+      const map = {};
+      (data || []).forEach(r => { map[r.key] = r.value; });
+
+      // Fill form fields with current values (fall back to config-videos.js defaults)
+      const vcfg = window.MYDRIVE_VIDEOS || {};
+      const val = (key, fallback) => map[key] !== undefined ? map[key] : fallback;
+
+      document.getElementById('set_site_name').value = val('site_name', vcfg.rootFolder || '');
+      document.getElementById('set_smartlink').value = val('smartlink', vcfg.smartlink || '');
+      document.getElementById('set_auto_pause_enabled').value = val('auto_pause_enabled', vcfg.autoPause?.enabled ? 'true' : 'false');
+      document.getElementById('set_auto_pause_count').value = val('auto_pause_count', vcfg.autoPause?.count || 2);
+      document.getElementById('set_telegram_url').value = val('telegram_url', vcfg.telegram?.url || '');
+      document.getElementById('set_telegram_text').value = val('telegram_text', vcfg.telegram?.text || '');
+      document.getElementById('set_telegram_enabled').value = val('telegram_enabled', vcfg.telegram?.enabled ? 'true' : 'false');
+      document.getElementById('set_popup_ad_enabled').value = val('popup_ad_enabled', vcfg.popupAd?.enabled ? 'true' : 'false');
+      document.getElementById('set_popup_ad_zone').value = val('popup_ad_zone', vcfg.popupAd?.zone || '');
+      document.getElementById('set_popup_ad_src').value = val('popup_ad_src', vcfg.popupAd?.src || '');
+      document.getElementById('set_histats_enabled').value = val('histats_enabled', vcfg.histats?.enabled ? 'true' : 'false');
+      document.getElementById('set_histats_id').value = val('histats_id', vcfg.histats?.id || '');
+    } catch (err) {
+      showToast('Error loading settings: ' + err.message, 'error');
+    }
+  }
+
+  async function handleSaveSettings() {
+    const btn = document.getElementById('saveSettingsBtn');
+    btn.disabled = true;
+    btn.textContent = 'Saving...';
+
+    const values = {
+      site_name: document.getElementById('set_site_name').value.trim(),
+      smartlink: document.getElementById('set_smartlink').value.trim(),
+      auto_pause_enabled: document.getElementById('set_auto_pause_enabled').value,
+      auto_pause_count: document.getElementById('set_auto_pause_count').value,
+      telegram_url: document.getElementById('set_telegram_url').value.trim(),
+      telegram_text: document.getElementById('set_telegram_text').value.trim(),
+      telegram_enabled: document.getElementById('set_telegram_enabled').value,
+      popup_ad_enabled: document.getElementById('set_popup_ad_enabled').value,
+      popup_ad_zone: document.getElementById('set_popup_ad_zone').value.trim(),
+      popup_ad_src: document.getElementById('set_popup_ad_src').value.trim(),
+      histats_enabled: document.getElementById('set_histats_enabled').value,
+      histats_id: document.getElementById('set_histats_id').value.trim(),
+    };
+
+    // Build array for bulk upsert
+    const rows = SETTING_KEYS.map(key => ({ key, value: String(values[key] || '') }));
+
+    try {
+      const { data, error } = await supabaseClient
+        .from('settings')
+        .upsert(rows, { onConflict: 'key' });
+
+      if (error) {
+        throw error;
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Save All Settings';
+      showToast(`Saved ${rows.length} settings successfully`, 'success');
+    } catch (err) {
+      btn.disabled = false;
+      btn.textContent = 'Save All Settings';
+      const errMsg = err.message || 'Unknown error';
+      showToast('Save failed: ' + errMsg, 'error');
+      console.error('Settings save error:', err);
+
+      // If table doesn't exist, show helpful message
+      if (errMsg.includes('does not exist') || errMsg.includes('relation')) {
+        showToast('Settings table not found. Run the SQL in Supabase SQL Editor first!', 'error');
+      }
+    }
+  }
+
+  // ---------- MySQL Handlers ----------
+  async function handleMySQLLogin(e) {
+    e.preventDefault();
+    const password = document.getElementById('loginPassword').value;
+    const errEl = document.getElementById('loginError');
+    const btn = document.getElementById('loginBtn');
+    errEl.classList.remove('show');
+    btn.disabled = true;
+    btn.textContent = 'Signing in...';
+    try {
+      const res = await fetch(`${mysqlApiUrl}?action=login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+        credentials: 'include',
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Login failed');
+      showDashboard();
+    } catch (err) {
+      errEl.textContent = err.message || 'Login failed';
+      errEl.classList.add('show');
+      btn.disabled = false;
+      btn.textContent = 'Sign In';
+    }
+  }
+
+  async function handleMySQLSignout() {
+    try { await fetch(`${mysqlApiUrl}?action=logout`, { method: 'POST', credentials: 'include' }); } catch {}
+    showLogin();
+  }
+
+  async function mysqlLoadData() {
+    try {
+      const res = await fetch(`${mysqlApiUrl}?action=data`, { credentials: 'include' });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      allFolders = data.folders || [];
+      allVideos = data.videos || [];
+      renderFolders();
+      renderVideos();
+      populateFolderSelects();
+      updateStats();
+    } catch (err) {
+      showToast('Error loading data: ' + err.message, 'error');
+    }
+  }
+
+  async function mysqlLoadSettings() {
+    try {
+      const res = await fetch(`${mysqlApiUrl}?action=data`, { credentials: 'include' });
+      const data = await res.json();
+      const map = data.settings || {};
+      const vcfg = window.MYDRIVE_VIDEOS || {};
+      const val = (k, f) => map[k] !== undefined ? map[k] : f;
+      document.getElementById('set_site_name').value = val('site_name', vcfg.rootFolder || '');
+      document.getElementById('set_smartlink').value = val('smartlink', vcfg.smartlink || '');
+      document.getElementById('set_auto_pause_enabled').value = val('auto_pause_enabled', vcfg.autoPause?.enabled ? 'true' : 'false');
+      document.getElementById('set_auto_pause_count').value = val('auto_pause_count', vcfg.autoPause?.count || 2);
+      document.getElementById('set_telegram_url').value = val('telegram_url', vcfg.telegram?.url || '');
+      document.getElementById('set_telegram_text').value = val('telegram_text', vcfg.telegram?.text || '');
+      document.getElementById('set_telegram_enabled').value = val('telegram_enabled', vcfg.telegram?.enabled ? 'true' : 'false');
+      document.getElementById('set_popup_ad_enabled').value = val('popup_ad_enabled', vcfg.popupAd?.enabled ? 'true' : 'false');
+      document.getElementById('set_popup_ad_zone').value = val('popup_ad_zone', vcfg.popupAd?.zone || '');
+      document.getElementById('set_popup_ad_src').value = val('popup_ad_src', vcfg.popupAd?.src || '');
+      document.getElementById('set_histats_enabled').value = val('histats_enabled', vcfg.histats?.enabled ? 'true' : 'false');
+      document.getElementById('set_histats_id').value = val('histats_id', vcfg.histats?.id || '');
+    } catch (err) {
+      showToast('Error loading settings: ' + err.message, 'error');
+    }
+  }
+
+  // Override loadData and loadSettings for MySQL mode
+  const originalShowDashboard = showDashboard;
+  if (dbMode === 'mysql') {
+    showDashboard = function() {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('setupNotice').style.display = 'none';
+      document.getElementById('dashboard').classList.add('show');
+      mysqlLoadData();
+      mysqlLoadSettings();
+    };
+    // Override CRUD functions
+    handleAddFolder = async function(e) {
+      e.preventDefault();
+      const name = document.getElementById('folderName').value.trim();
+      const parentId = document.getElementById('folderParent').value || null;
+      if (!name) return;
+      try {
+        const res = await fetch(`${mysqlApiUrl}?action=save_folder`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, parent_id: parentId, sort_order: allFolders.length }),
+          credentials: 'include',
+        });
+        if (!res.ok) throw new Error('Save failed');
+        document.getElementById('folderName').value = '';
+        await mysqlLoadData();
+        showToast('Folder added', 'success');
+      } catch (err) { showToast('Error: ' + err.message, 'error'); }
+    };
+    handleAddVideo = async function(e) {
+      e.preventDefault();
+      const name = document.getElementById('videoName').value.trim();
+      const url = document.getElementById('videoUrl').value.trim();
+      const folderId = document.getElementById('videoFolder').value;
+      if (!url || !folderId) { showToast('URL and Folder required', 'error'); return; }
+      try {
+        const res = await fetch(`${mysqlApiUrl}?action=save_video`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: name || null, url, folder_id: folderId, sort_order: allVideos.length }),
+          credentials: 'include',
+        });
+        if (!res.ok) throw new Error('Save failed');
+        document.getElementById('videoName').value = '';
+        document.getElementById('videoUrl').value = '';
+        await mysqlLoadData();
+        showToast('Video added', 'success');
+      } catch (err) { showToast('Error: ' + err.message, 'error'); }
+    };
+    handleBulkAddFolders = async function(e) {
+      e.preventDefault();
+      const parentId = document.getElementById('bulkFolderParent').value || null;
+      const names = document.getElementById('bulkFolderNames').value.trim().split('\n').filter(Boolean);
+      let ok = 0;
+      for (const name of names) {
+        try {
+          await fetch(`${mysqlApiUrl}?action=save_folder`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: name.trim(), parent_id: parentId, sort_order: allFolders.length + ok }),
+            credentials: 'include',
+          });
+          ok++;
+        } catch {}
+      }
+      document.getElementById('bulkFolderNames').value = '';
+      await mysqlLoadData();
+      showToast(`Added ${ok} folders`, 'success');
+    };
+    handleBulkAddVideos = async function(e) {
+      e.preventDefault();
+      const folderId = document.getElementById('bulkVideoFolder').value;
+      const urls = document.getElementById('bulkVideoUrls').value.trim().split('\n').filter(Boolean);
+      let ok = 0;
+      for (const url of urls) {
+        try {
+          await fetch(`${mysqlApiUrl}?action=save_video`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: url.split('/').pop(), url: url.trim(), folder_id: folderId, sort_order: allVideos.length + ok }),
+            credentials: 'include',
+          });
+          ok++;
+        } catch {}
+      }
+      document.getElementById('bulkVideoUrls').value = '';
+      await mysqlLoadData();
+      showToast(`Added ${ok} videos`, 'success');
+    };
+    handleSaveSettings = async function() {
+      const btn = document.getElementById('saveSettingsBtn');
+      btn.disabled = true; btn.textContent = 'Saving...';
+      const settings = {};
+      SETTING_KEYS.forEach(k => {
+        const el = document.getElementById('set_' + k);
+        if (el) settings[k] = el.value;
+      });
+      try {
+        const res = await fetch(`${mysqlApiUrl}?action=save_settings`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ settings }),
+          credentials: 'include',
+        });
+        if (!res.ok) throw new Error('Save failed');
+        showToast('Settings saved', 'success');
+      } catch (err) { showToast('Error: ' + err.message, 'error'); }
+      btn.disabled = false; btn.textContent = 'Save All Settings';
+    };
+    window.deleteFolder = async function(id) {
+      if (!confirm('Delete this folder?')) return;
+      try {
+        await fetch(`${mysqlApiUrl}?action=delete_folder`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id }), credentials: 'include',
+        });
+        await mysqlLoadData();
+        showToast('Folder deleted', 'success');
+      } catch (err) { showToast('Error: ' + err.message, 'error'); }
+    };
+    window.deleteVideo = async function(id) {
+      if (!confirm('Delete this video?')) return;
+      try {
+        await fetch(`${mysqlApiUrl}?action=delete_video`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id }), credentials: 'include',
+        });
+        await mysqlLoadData();
+        showToast('Video deleted', 'success');
+      } catch (err) { showToast('Error: ' + err.message, 'error'); }
+    };
+  }
+
+  // ---------- Utils ----------
+  function esc(s) {
+    if (!s) return '';
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
+  function generateId() {
+    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let id = '';
+    for (let i = 0; i < 8; i++) {
+      id += chars[Math.floor(Math.random() * chars.length)];
+    }
+    return id;
+  }
+
+  function showToast(msg, type) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast show ' + (type || '');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  // Boot
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+# ============================================================
+# Konfigurasi GitHub Pages (opsional, untuk site metadata)
+# Tidak wajib diubah. Hanya jika kamu ingin customisasi tambahan.
+# ============================================================
+
+# Title site (override jika perlu)
+title: MyDrive
+
+# Theme: null = gunakan styling sendiri (recommended)
+theme: null
+
+# Aktifkan GitHub Pages metadata (sebagian plugin dipakai oleh Jekyll)
+# Tidak mempengaruhi tampilan karena kita pakai .nojekyll
+plugins:
+  - jekyll-relative-links
+
+relative_links:
+  enabled: true
+  collections: true
+
+# Exclude folder yang tidak perlu diproses
+exclude:
+  - node_modules
+  - .github
+  - scripts
+  - README.md

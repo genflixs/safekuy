@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0a0f">
+  <title>Privacy Policy — <span data-site-name>MyDrive</span></title>
+  <meta name="description" content="Privacy Policy for MyDrive. Learn what information we collect, how we use it, and your rights regarding your data.">
+  <meta name="robots" content="index, follow">
+  <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.svg">
+  <link rel="stylesheet" href="/assets/css/style.css?v=7">
+  <style>
+    /* ---------- Legal page layout ---------- */
+    .legal-shell {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: var(--space-4);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-5);
+      min-height: 100vh;
+    }
+
+    .legal-topbar {
+      position: sticky;
+      top: var(--space-3);
+      z-index: 50;
+      background: var(--backdrop);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      overflow: hidden;
+    }
+
+    .legal-topbar-inner {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      padding: var(--space-3) var(--space-4);
+      min-height: 64px;
+      flex-wrap: wrap;
+    }
+
+    .legal-nav {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      margin-left: auto;
+      flex-wrap: wrap;
+    }
+
+    .legal-nav a {
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-full);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      transition: color var(--duration-fast) var(--ease),
+                  background var(--duration-fast) var(--ease);
+    }
+
+    .legal-nav a:hover { color: var(--text); background: var(--surface-2); }
+    .legal-nav a.active { color: var(--primary); background: var(--primary-soft); }
+
+    /* ---------- Document ---------- */
+    .doc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-7) var(--space-6) var(--space-6);
+      box-shadow: var(--shadow-md);
+    }
+
+    @media (max-width: 768px) {
+      .doc { padding: var(--space-6) var(--space-4); }
+    }
+
+    .doc-header {
+      margin-bottom: var(--space-6);
+      padding-bottom: var(--space-5);
+      border-bottom: 1px solid var(--border-soft);
+    }
+
+    .doc-eyebrow {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--primary);
+      background: var(--primary-soft);
+      padding: var(--space-1) var(--space-3);
+      border-radius: var(--radius-full);
+      margin-bottom: var(--space-3);
+    }
+
+    .doc-title {
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: var(--space-3);
+    }
+
+    .doc-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .doc-meta strong { color: var(--text-2); font-weight: 600; }
+
+    /* ---------- Prose ---------- */
+    .prose { color: var(--text-2); font-size: 15px; line-height: 1.7; }
+
+    .prose h2 {
+      font-size: 19px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      margin-top: var(--space-7);
+      margin-bottom: var(--space-3);
+      scroll-margin-top: 90px;
+    }
+    .prose h2:first-child { margin-top: 0; }
+
+    .prose h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+      margin-top: var(--space-5);
+      margin-bottom: var(--space-2);
+    }
+
+    .prose p { margin-bottom: var(--space-4); }
+
+    .prose ul {
+      list-style: none;
+      margin: var(--space-3) 0 var(--space-5);
+      padding: 0;
+    }
+
+    .prose li {
+      position: relative;
+      padding-left: var(--space-5);
+      margin-bottom: var(--space-3);
+    }
+
+    .prose li::before {
+      content: "";
+      position: absolute;
+      left: 6px;
+      top: 10px;
+      width: 6px;
+      height: 6px;
+      border-radius: var(--radius-full);
+      background: var(--primary);
+    }
+
+    .prose a {
+      color: var(--primary);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(var(--primary-rgb), 0.3);
+      transition: border-color var(--duration-fast) var(--ease);
+    }
+    .prose a:hover { border-color: var(--primary); }
+    .prose strong { color: var(--text); font-weight: 600; }
+
+    .callout {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--primary);
+      border-radius: var(--radius-md);
+      padding: var(--space-4) var(--space-5);
+      margin: var(--space-5) 0;
+      font-size: 14px;
+      color: var(--text-2);
+    }
+    .callout strong { color: var(--text); }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: var(--space-4) 0 var(--space-5);
+      font-size: 14px;
+    }
+
+    .data-table th,
+    .data-table td {
+      text-align: left;
+      padding: var(--space-3) var(--space-4);
+      border-bottom: 1px solid var(--border-soft);
+      vertical-align: top;
+    }
+
+    .data-table th {
+      color: var(--text);
+      font-weight: 600;
+      font-size: 13px;
+      background: var(--surface-2);
+    }
+
+    .data-table td { color: var(--text-2); }
+    .data-table tr:last-child td { border-bottom: none; }
+
+    /* ---------- Footer ---------- */
+    .legal-footer {
+      text-align: center;
+      padding: var(--space-5) var(--space-3);
+      color: var(--muted);
+      font-size: 13px;
+      border-top: 1px solid var(--border);
+    }
+    .legal-footer a { color: var(--muted); }
+    .legal-footer a:hover { color: var(--primary); }
+
+    @media (max-width: 640px) {
+      .legal-nav { width: 100%; margin-left: 0; justify-content: center; }
+      .doc-title { font-size: 24px; }
+      .data-table { font-size: 13px; }
+      .data-table th, .data-table td { padding: var(--space-2) var(--space-3); }
+    }
+  </style>
+</head>
+<body>
+  <div class="legal-shell">
+    <!-- Topbar -->
+    <header class="legal-topbar">
+      <div class="legal-topbar-inner">
+        <a href="/" class="brand" aria-label="Home">
+          <span class="brand-mark">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="width: 22px; height: 22px; color: #fff;">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+          </span>
+          <span class="brand-text">
+            <span class="brand-name" data-site-name>MyDrive</span>
+            <span class="brand-tagline">Video gallery</span>
+          </span>
+        </a>
+
+        <nav class="legal-nav" aria-label="Legal">
+          <a href="/tos">Terms</a>
+          <a href="/dmca">DMCA</a>
+          <a href="/privacy" class="active">Privacy</a>
+          <a href="/contact">Contact</a>
+        </nav>
+
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle light/dark theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="5" fill="currentColor"/>
+            <g stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <line x1="12" y1="1" x2="12" y2="3"/>
+              <line x1="12" y1="21" x2="12" y2="23"/>
+              <line x1="1" y1="12" x2="3" y2="12"/>
+              <line x1="21" y1="12" x2="23" y2="12"/>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </g>
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="currentColor"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Document -->
+    <main class="doc">
+      <header class="doc-header">
+        <span class="doc-eyebrow">Legal</span>
+        <h1 class="doc-title">Privacy Policy</h1>
+        <div class="doc-meta">
+          <span><strong>Effective Date:</strong> January 1, 2026</span>
+          <span><strong>Last Updated:</strong> January 1, 2026</span>
+        </div>
+      </header>
+
+      <article class="prose">
+        <p>This Privacy Policy explains how <strong data-site-name>MyDrive</strong> ("<strong>we</strong>", "<strong>us</strong>", or "<strong>our</strong>") collects, uses, and protects information when you visit and use our website and video gallery (the "<strong>Service</strong>"). By using the Service, you consent to the practices described in this policy.</p>
+
+        <div class="callout">
+          We are committed to being transparent about the data we collect. We do not sell your personal information to third parties.
+        </div>
+
+        <h2>1. Information We Collect</h2>
+        <p>We collect a limited amount of information necessary to operate and improve the Service. The categories of information we may collect include:</p>
+
+        <h3>Information you provide directly</h3>
+        <ul>
+          <li><strong>Contact messages:</strong> When you use our <a href="/contact">contact form</a> or email us, we receive your name, email address, and the contents of your message.</li>
+          <li><strong>DMCA notices:</strong> When you submit a copyright takedown notice, we receive the information included in that notice as described in our <a href="/dmca">DMCA Policy</a>.</li>
+        </ul>
+
+        <h3>Information collected automatically</h3>
+        <ul>
+          <li><strong>IP address:</strong> Your IP address is logged by our servers and may be used for security, fraud prevention, and aggregate analytics.</li>
+          <li><strong>Device &amp; browser information:</strong> We may collect your browser type, operating system, screen resolution, and language preference.</li>
+          <li><strong>Usage data:</strong> Information about how you interact with the Service, such as pages visited, referring URLs, timestamps, and approximate location derived from your IP address.</li>
+          <li><strong>Cookies &amp; similar technologies:</strong> We use cookies and local storage to remember your theme preference (dark/light) and to support session functionality. See the <a href="#cookies">Cookies section</a> below for details.</li>
+        </ul>
+
+        <h2 id="cookies">2. Cookies and Local Storage</h2>
+        <p>Cookies are small text files stored on your device. We use the following types of cookies and local storage:</p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Purpose</th>
+              <th>Duration</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Preference cookie</td>
+              <td>Remembers your selected theme (dark or light mode).</td>
+              <td>Persistent (until cleared)</td>
+            </tr>
+            <tr>
+              <td>Session storage</td>
+              <td>Supports session-related features during your visit.</td>
+              <td>Until browser is closed</td>
+            </tr>
+            <tr>
+              <td>Analytics cookies</td>
+              <td>Help us understand how the Service is used (only if analytics is enabled).</td>
+              <td>Up to 12 months</td>
+            </tr>
+            <tr>
+              <td>Advertising cookies</td>
+              <td>Used by third-party advertising partners to serve relevant ads (only if ads are enabled).</td>
+              <td>Varies by provider</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>You can control or delete cookies through your browser settings. Disabling cookies may affect some features of the Service, such as theme persistence.</p>
+
+        <h2>3. How We Use Your Information</h2>
+        <p>We use the information we collect for the following purposes:</p>
+        <ul>
+          <li><strong>Operating the Service:</strong> Delivering content, managing sessions, and maintaining site functionality.</li>
+          <li><strong>Communication:</strong> Responding to your inquiries, DMCA notices, and other requests.</li>
+          <li><strong>Improvement:</strong> Analyzing usage patterns to improve performance, usability, and content organization.</li>
+          <li><strong>Security &amp; fraud prevention:</strong> Detecting and preventing abuse, unauthorized access, and malicious activity.</li>
+          <li><strong>Legal compliance:</strong> Fulfilling legal obligations and enforcing our <a href="/tos">Terms of Service</a>.</li>
+          <li><strong>Analytics:</strong> Measuring traffic and engagement in aggregate form.</li>
+        </ul>
+
+        <h2>4. Third-Party Services</h2>
+        <p>We may rely on trusted third-party services to operate and improve the Service. These providers may collect information governed by their own privacy policies. The categories of third-party services we may use include:</p>
+        <ul>
+          <li><strong>Analytics providers:</strong> To measure and understand site traffic (for example, privacy-focused or standard analytics platforms). These services may set their own cookies and collect usage data.</li>
+          <li><strong>Advertising networks:</strong> If advertising is enabled, third-party ad networks may serve ads and use cookies to personalize content and measure ad performance. You can typically manage personalized advertising through your device settings or the ad network's opt-out tools.</li>
+          <li><strong>Content delivery networks (CDNs):</strong> Video and media files may be delivered through external CDN servers, which may log access for performance and security purposes.</li>
+          <li><strong>Communication tools:</strong> Services used to receive and manage contact form submissions and email.</li>
+        </ul>
+        <p>We do not control the data practices of third parties and encourage you to review their privacy policies.</p>
+
+        <h2>5. Data Retention</h2>
+        <p>We retain personal information only for as long as necessary to fulfill the purposes described in this policy, comply with legal obligations, resolve disputes, and enforce our agreements. Usage and log data is typically retained for a limited period and then aggregated or deleted.</p>
+
+        <h2>6. Data Security</h2>
+        <p>We take reasonable measures to protect the information we collect against unauthorized access, alteration, or disclosure. However, no method of transmission or storage is completely secure, and we cannot guarantee absolute security.</p>
+
+        <h2>7. Your Privacy Rights</h2>
+        <p>Depending on your jurisdiction, you may have certain rights regarding your personal information, which may include:</p>
+        <ul>
+          <li><strong>Access:</strong> Requesting a copy of the personal information we hold about you.</li>
+          <li><strong>Correction:</strong> Requesting that we correct inaccurate or incomplete information.</li>
+          <li><strong>Deletion:</strong> Requesting that we delete your personal information (subject to legal exceptions).</li>
+          <li><strong>Opt-out:</strong> Declining certain data collection, such as analytics or personalized advertising, by adjusting your browser settings or using opt-out tools.</li>
+          <li><strong>Withdrawal of consent:</strong> Withdrawing consent for processing activities that rely on your consent.</li>
+        </ul>
+        <p>To exercise any of these rights, please contact us using the details in the Contact section below. We will respond to verified requests within a reasonable timeframe.</p>
+
+        <h2>8. Children's Privacy</h2>
+        <p>The Service is not directed to children under the age of 13 (or the minimum age required in your jurisdiction). We do not knowingly collect personal information from children. If you believe a child has provided us with personal information, please contact us and we will take steps to delete it.</p>
+
+        <h2>9. International Data Transfers</h2>
+        <p>Your information may be processed in countries other than your own. By using the Service, you acknowledge that your data may be transferred to and processed in jurisdictions with different data protection laws. We take steps to ensure such transfers comply with applicable law.</p>
+
+        <h2>10. Changes to This Policy</h2>
+        <p>We may update this Privacy Policy from time to time. When we do, we will revise the "Last Updated" date at the top of this page. We encourage you to review this policy periodically.</p>
+        <div class="callout">
+          If we make material changes to how we handle your personal information, we will provide a more prominent notice (such as on the homepage or via email, where possible).
+        </div>
+
+        <h2>11. Contact Us</h2>
+        <p>If you have any questions, concerns, or requests regarding this Privacy Policy or your personal data, please contact us at:</p>
+        <p>
+          <strong>Email:</strong> <a href="mailto:contact@mydrive.com" data-email="contact">contact@mydrive.com</a><br>
+          <strong>Privacy inquiries:</strong> <a href="mailto:privacy@mydrive.com" data-email="privacy">privacy@mydrive.com</a><br>
+          <strong>Copyright / DMCA:</strong> <a href="mailto:dmca@mydrive.com" data-email="dmca">dmca@mydrive.com</a>
+        </p>
+      </article>
+    </main>
+
+    <!-- Footer -->
+    <footer class="legal-footer">
+      <span>&copy; 2026 <span data-site-name>MyDrive</span>. All rights reserved.</span>
+      &nbsp;·&nbsp;
+      <a href="/tos">Terms</a>
+      &nbsp;·&nbsp;
+      <a href="/dmca">DMCA</a>
+      &nbsp;·&nbsp;
+      <a href="/privacy">Privacy</a>
+      &nbsp;·&nbsp;
+      <a href="/contact">Contact</a>
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      // ---------- Theme toggle ----------
+      var root = document.documentElement;
+      try {
+        var stored = localStorage.getItem("theme");
+        if (stored === "light" || stored === "dark") {
+          root.setAttribute("data-theme", stored);
+        }
+      } catch (e) {}
+
+      var toggle = document.getElementById("themeToggle");
+      if (toggle) {
+        toggle.addEventListener("click", function () {
+          var current = root.getAttribute("data-theme") || "dark";
+          var next = current === "dark" ? "light" : "dark";
+          root.setAttribute("data-theme", next);
+          try { localStorage.setItem("theme", next); } catch (e) {}
+        });
+      }
+
+      // ---------- Derive site name & domain ----------
+      function deriveName() {
+        try {
+          var h = window.location.hostname;
+          if (h && h !== "localhost" && h !== "127.0.0.1") {
+            var n = h.split(".")[0];
+            return n.charAt(0).toUpperCase() + n.slice(1);
+          }
+        } catch (e) {}
+        return "MyDrive";
+      }
+      function deriveDomain() {
+        try {
+          var h = window.location.hostname;
+          if (h && h !== "localhost" && h !== "127.0.0.1") return h;
+        } catch (e) {}
+        return "mydrive.com";
+      }
+
+      function applyBranding() {
+        var name = deriveName();
+        var domain = deriveDomain();
+        Array.prototype.forEach.call(
+          document.querySelectorAll("[data-site-name]"),
+          function (el) { el.textContent = name; }
+        );
+        Array.prototype.forEach.call(
+          document.querySelectorAll("[data-email]"),
+          function (el) {
+            var user = el.getAttribute("data-email") || "contact";
+            var addr = user + "@" + domain;
+            el.textContent = addr;
+            el.setAttribute("href", "mailto:" + addr);
+          }
+        );
+      }
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", applyBranding);
+      } else {
+        applyBranding();
+      }
+    })();
+  </script>
+</body>
+</html>

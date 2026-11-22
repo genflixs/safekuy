@@ -1,0 +1,11 @@
+{
+  "rewrites": [
+    { "source": "/v", "destination": "/index.html" },
+    { "source": "/admin", "destination": "/admin/index.html" },
+    { "source": "/tos", "destination": "/tos/index.html" },
+    { "source": "/dmca", "destination": "/dmca/index.html" },
+    { "source": "/privacy", "destination": "/privacy/index.html" },
+    { "source": "/contact", "destination": "/contact/index.html" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}

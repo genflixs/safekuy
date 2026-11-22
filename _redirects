@@ -1,0 +1,10 @@
+# Netlify SPA Redirects
+# File ini untuk deploy ke Netlify (gratis, support SPA otomatis)
+# Tapi kalau pakai Netlify, ini memastikan semua URL work
+
+/*    /index.html   200
+/admin/*  /admin/index.html   200
+/tos/*    /tos/index.html     200
+/dmca/*   /dmca/index.html    200
+/privacy/* /privacy/index.html 200
+/contact/* /contact/index.html 200

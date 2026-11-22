@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Streaming HD Free</title>
+  <script>
+    // ============================================================
+    //  GitHub Pages / Static Hosting SPA Fallback
+    // ============================================================
+    //  When a user visits /x or /v?id=xxx directly (or reloads),
+    //  the server returns this 404.html because no static file
+    //  exists at that path.
+    //
+    //  We redirect to /?_path=<original_path> so the app loads
+    //  normally and restores the clean URL via history.replaceState.
+    //  This is more reliable than sessionStorage.
+    // ============================================================
+    (function () {
+      var path = window.location.pathname + window.location.search;
+      // Don't redirect if we're already at root
+      if (path === '/' || path === '') {
+        window.location.replace('/');
+        return;
+      }
+      // Redirect to root with _path param containing original path
+      window.location.replace('/?_path=' + encodeURIComponent(path));
+    })();
+  </script>
+  <style>
+    body {
+      background: #06060a;
+      color: #f7f7fb;
+      font-family: Arial, Helvetica, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .loader {
+      text-align: center;
+    }
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(254, 96, 129, 0.2);
+      border-top-color: #fe6081;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="loader">
+    <div class="spinner"></div>
+    <p>Loading...</p>
+  </div>
+</body>
+</html>

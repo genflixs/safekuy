@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0a0f">
+  <title>Contact — <span data-site-name>MyDrive</span></title>
+  <meta name="description" content="Get in touch with MyDrive. Send us a message, email, or reach us on Telegram for support, feedback, and inquiries.">
+  <meta name="robots" content="index, follow">
+  <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.svg">
+  <link rel="stylesheet" href="/assets/css/style.css?v=7">
+  <style>
+    /* ---------- Contact page layout ---------- */
+    .contact-shell {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: var(--space-4);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-5);
+      min-height: 100vh;
+    }
+
+    .contact-topbar {
+      position: sticky;
+      top: var(--space-3);
+      z-index: 50;
+      background: var(--backdrop);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      overflow: hidden;
+    }
+
+    .contact-topbar-inner {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      padding: var(--space-3) var(--space-4);
+      min-height: 64px;
+      flex-wrap: wrap;
+    }
+
+    .legal-nav {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      margin-left: auto;
+      flex-wrap: wrap;
+    }
+
+    .legal-nav a {
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-full);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      transition: color var(--duration-fast) var(--ease),
+                  background var(--duration-fast) var(--ease);
+    }
+
+    .legal-nav a:hover { color: var(--text); background: var(--surface-2); }
+    .legal-nav a.active { color: var(--primary); background: var(--primary-soft); }
+
+    /* ---------- Page heading ---------- */
+    .page-head {
+      text-align: center;
+      padding: var(--space-5) var(--space-3) var(--space-2);
+    }
+
+    .page-eyebrow {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--primary);
+      background: var(--primary-soft);
+      padding: var(--space-1) var(--space-3);
+      border-radius: var(--radius-full);
+      margin-bottom: var(--space-3);
+    }
+
+    .page-title {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: var(--space-3);
+    }
+
+    .page-subtitle {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 560px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* ---------- Grid ---------- */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: var(--space-5);
+      align-items: start;
+    }
+
+    @media (max-width: 880px) {
+      .contact-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ---------- Card ---------- */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      box-shadow: var(--shadow-md);
+    }
+
+    @media (max-width: 640px) {
+      .card { padding: var(--space-5) var(--space-4); }
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: var(--space-2);
+    }
+
+    .card-desc {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: var(--space-5);
+      line-height: 1.6;
+    }
+
+    /* ---------- Form ---------- */
+    .field {
+      margin-bottom: var(--space-5);
+    }
+
+    .field-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-2);
+      margin-bottom: var(--space-2);
+    }
+
+    .field-input,
+    .field-textarea {
+      width: 100%;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: var(--space-3) var(--space-4);
+      font-size: 14px;
+      color: var(--text);
+      font-family: inherit;
+      transition: border-color var(--duration-fast) var(--ease),
+                  box-shadow var(--duration-fast) var(--ease),
+                  background var(--duration-fast) var(--ease);
+    }
+
+    .field-input::placeholder,
+    .field-textarea::placeholder { color: var(--muted-2); }
+
+    .field-input:focus,
+    .field-textarea:focus {
+      outline: none;
+      border-color: var(--primary-border);
+      box-shadow: 0 0 0 3px var(--primary-soft);
+      background: var(--surface);
+    }
+
+    .field-textarea {
+      min-height: 140px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    .field-error {
+      display: none;
+      font-size: 12px;
+      color: var(--primary);
+      margin-top: var(--space-2);
+    }
+
+    .field.invalid .field-error { display: block; }
+    .field.invalid .field-input,
+    .field.invalid .field-textarea {
+      border-color: var(--primary-border);
+    }
+
+    .send-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      height: 46px;
+      padding: 0 var(--space-6);
+      border-radius: var(--radius-md);
+      background: var(--primary);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      border: 1px solid transparent;
+      box-shadow: var(--shadow-glow);
+      transition: background var(--duration-fast) var(--ease),
+                  transform var(--duration-fast) var(--ease),
+                  opacity var(--duration-fast) var(--ease);
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .send-btn:hover { background: var(--primary-hover); transform: translateY(-1px); }
+    .send-btn:active { transform: translateY(0); }
+    .send-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .send-btn svg { width: 18px; height: 18px; }
+
+    /* ---------- Success message ---------- */
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: var(--space-5) var(--space-3);
+    }
+
+    .form-success.is-visible { display: block; }
+
+    .success-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius-full);
+      background: var(--primary-soft);
+      color: var(--primary);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: var(--space-4);
+    }
+
+    .success-icon svg { width: 28px; height: 28px; }
+
+    .success-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: var(--space-2);
+    }
+
+    .success-text {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .success-reset {
+      margin-top: var(--space-4);
+      background: none;
+      color: var(--primary);
+      font-size: 13px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      border-bottom: 1px solid rgba(var(--primary-rgb), 0.3);
+      padding-bottom: 2px;
+    }
+
+    .success-reset:hover { border-color: var(--primary); }
+
+    /* ---------- Contact info list ---------- */
+    .info-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .info-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-4);
+      padding: var(--space-4);
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      transition: border-color var(--duration-fast) var(--ease);
+    }
+
+    .info-item:hover { border-color: var(--primary-border); }
+
+    .info-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-md);
+      background: var(--primary-soft);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .info-icon svg { width: 20px; height: 20px; }
+
+    .info-body { min-width: 0; flex: 1; }
+
+    .info-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: var(--space-1);
+    }
+
+    .info-value {
+      font-size: 14px;
+      color: var(--text);
+      font-weight: 500;
+      word-break: break-word;
+    }
+
+    .info-value a {
+      color: var(--text);
+      border-bottom: 1px solid rgba(var(--primary-rgb), 0.3);
+    }
+    .info-value a:hover { color: var(--primary); border-color: var(--primary); }
+
+    /* ---------- Telegram CTA ---------- */
+    .telegram-card {
+      background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.12), rgba(var(--primary-rgb), 0.04));
+      border: 1px solid var(--primary-border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      text-align: center;
+    }
+
+    .telegram-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: var(--radius-full);
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: var(--space-4);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .telegram-icon svg { width: 26px; height: 26px; }
+
+    .telegram-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: var(--space-2);
+    }
+
+    .telegram-text {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: var(--space-5);
+    }
+
+    .telegram-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      height: 44px;
+      padding: 0 var(--space-5);
+      border-radius: var(--radius-md);
+      background: var(--primary);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: var(--shadow-glow);
+      transition: background var(--duration-fast) var(--ease), transform var(--duration-fast) var(--ease);
+    }
+
+    .telegram-btn:hover { background: var(--primary-hover); transform: translateY(-1px); }
+    .telegram-btn svg { width: 18px; height: 18px; }
+
+    /* ---------- Footer ---------- */
+    .legal-footer {
+      text-align: center;
+      padding: var(--space-5) var(--space-3);
+      color: var(--muted);
+      font-size: 13px;
+      border-top: 1px solid var(--border);
+    }
+    .legal-footer a { color: var(--muted); }
+    .legal-footer a:hover { color: var(--primary); }
+
+    @media (max-width: 640px) {
+      .legal-nav { width: 100%; margin-left: 0; justify-content: center; }
+      .page-title { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="contact-shell">
+    <!-- Topbar -->
+    <header class="contact-topbar">
+      <div class="contact-topbar-inner">
+        <a href="/" class="brand" aria-label="Home">
+          <span class="brand-mark">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="width: 22px; height: 22px; color: #fff;">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+          </span>
+          <span class="brand-text">
+            <span class="brand-name" data-site-name>MyDrive</span>
+            <span class="brand-tagline">Video gallery</span>
+          </span>
+        </a>
+
+        <nav class="legal-nav" aria-label="Legal">
+          <a href="/tos">Terms</a>
+          <a href="/dmca">DMCA</a>
+          <a href="/privacy">Privacy</a>
+          <a href="/contact" class="active">Contact</a>
+        </nav>
+
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle light/dark theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="5" fill="currentColor"/>
+            <g stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <line x1="12" y1="1" x2="12" y2="3"/>
+              <line x1="12" y1="21" x2="12" y2="23"/>
+              <line x1="1" y1="12" x2="3" y2="12"/>
+              <line x1="21" y1="12" x2="23" y2="12"/>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </g>
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="currentColor"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Heading -->
+    <div class="page-head">
+      <span class="page-eyebrow">Support</span>
+      <h1 class="page-title">Get in Touch</h1>
+      <p class="page-subtitle">Have a question, feedback, or need to report an issue? We're here to help. Reach out and we'll get back to you as soon as possible.</p>
+    </div>
+
+    <!-- Grid -->
+    <div class="contact-grid">
+      <!-- Form -->
+      <section class="card">
+        <h2 class="card-title">Send a Message</h2>
+        <p class="card-desc">Fill out the form below and we'll respond via email. For copyright concerns, please use our <a href="/dmca" style="color: var(--primary);">DMCA process</a> instead.</p>
+
+        <form id="contactForm" novalidate>
+          <div class="field" data-field="name">
+            <label class="field-label" for="cf-name">Name</label>
+            <input type="text" id="cf-name" name="name" class="field-input" placeholder="Your name" autocomplete="name" required>
+            <p class="field-error">Please enter your name.</p>
+          </div>
+
+          <div class="field" data-field="email">
+            <label class="field-label" for="cf-email">Email</label>
+            <input type="email" id="cf-email" name="email" class="field-input" placeholder="you@example.com" autocomplete="email" required>
+            <p class="field-error">Please enter a valid email address.</p>
+          </div>
+
+          <div class="field" data-field="message">
+            <label class="field-label" for="cf-message">Message</label>
+            <textarea id="cf-message" name="message" class="field-textarea" placeholder="How can we help you?" required></textarea>
+            <p class="field-error">Please enter your message.</p>
+          </div>
+
+          <button type="submit" class="send-btn" id="sendBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="22" y1="2" x2="11" y2="13"/>
+              <polygon points="22 2 15 22 11 13 2 9 22 2" fill="currentColor"/>
+            </svg>
+            <span id="sendBtnText">Send Message</span>
+          </button>
+        </form>
+
+        <div class="form-success" id="formSuccess">
+          <div class="success-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </div>
+          <p class="success-title">Message Sent</p>
+          <p class="success-text">Thanks for reaching out. We've received your message and will get back to you at the email address you provided.</p>
+          <button type="button" class="success-reset" id="resetForm">Send another message</button>
+        </div>
+      </section>
+
+      <!-- Info -->
+      <section style="display: flex; flex-direction: column; gap: var(--space-5);">
+        <div class="card">
+          <h2 class="card-title">Contact Information</h2>
+          <p class="card-desc">Prefer to reach us directly? Use any of the channels below.</p>
+
+          <ul class="info-list">
+            <li class="info-item">
+              <span class="info-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
+                </svg>
+              </span>
+              <div class="info-body">
+                <p class="info-label">Email</p>
+                <p class="info-value"><a href="mailto:contact@mydrive.com" data-email="contact">contact@mydrive.com</a></p>
+              </div>
+            </li>
+
+            <li class="info-item">
+              <span class="info-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                </svg>
+              </span>
+              <div class="info-body">
+                <p class="info-label">Support Hours</p>
+                <p class="info-value">Mon – Fri, 9:00 – 18:00 (UTC)</p>
+              </div>
+            </li>
+
+            <li class="info-item">
+              <span class="info-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="8" x2="12" y2="12"/>
+                  <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+              </span>
+              <div class="info-body">
+                <p class="info-label">Response Time</p>
+                <p class="info-value">Typically within 24–48 hours</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Telegram CTA -->
+        <div class="telegram-card">
+          <div class="telegram-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M21.94 4.6l-3.2 15.07c-.24 1.06-.87 1.32-1.76.82l-4.87-3.59-2.35 2.26c-.26.26-.48.48-.98.48l.35-4.96 9.04-8.16c.39-.35-.08-.55-.61-.2L6.61 13.18l-4.8-1.5c-1.04-.32-1.06-1.04.22-1.54l18.76-7.24c.87-.32 1.63.2 1.35 1.7z"/>
+            </svg>
+          </div>
+          <p class="telegram-title">Join us on Telegram</p>
+          <p class="telegram-text">For quick updates and direct conversation, reach us on Telegram. Tap below to start a chat.</p>
+          <a class="telegram-btn" id="telegramLink" href="#" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M21.94 4.6l-3.2 15.07c-.24 1.06-.87 1.32-1.76.82l-4.87-3.59-2.35 2.26c-.26.26-.48.48-.98.48l.35-4.96 9.04-8.16c.39-.35-.08-.55-.61-.2L6.61 13.18l-4.8-1.5c-1.04-.32-1.06-1.04.22-1.54l18.76-7.24c.87-.32 1.63.2 1.35 1.7z"/>
+            </svg>
+            <span>Open Telegram</span>
+          </a>
+        </div>
+      </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="legal-footer">
+      <span>&copy; 2026 <span data-site-name>MyDrive</span>. All rights reserved.</span>
+      &nbsp;·&nbsp;
+      <a href="/tos">Terms</a>
+      &nbsp;·&nbsp;
+      <a href="/dmca">DMCA</a>
+      &nbsp;·&nbsp;
+      <a href="/privacy">Privacy</a>
+      &nbsp;·&nbsp;
+      <a href="/contact">Contact</a>
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      // ---------- Theme toggle ----------
+      var root = document.documentElement;
+      try {
+        var stored = localStorage.getItem("theme");
+        if (stored === "light" || stored === "dark") {
+          root.setAttribute("data-theme", stored);
+        }
+      } catch (e) {}
+
+      var toggle = document.getElementById("themeToggle");
+      if (toggle) {
+        toggle.addEventListener("click", function () {
+          var current = root.getAttribute("data-theme") || "dark";
+          var next = current === "dark" ? "light" : "dark";
+          root.setAttribute("data-theme", next);
+          try { localStorage.setItem("theme", next); } catch (e) {}
+        });
+      }
+
+      // ---------- Derive site name & domain ----------
+      function deriveName() {
+        try {
+          var h = window.location.hostname;
+          if (h && h !== "localhost" && h !== "127.0.0.1") {
+            var n = h.split(".")[0];
+            return n.charAt(0).toUpperCase() + n.slice(1);
+          }
+        } catch (e) {}
+        return "MyDrive";
+      }
+      function deriveDomain() {
+        try {
+          var h = window.location.hostname;
+          if (h && h !== "localhost" && h !== "127.0.0.1") return h;
+        } catch (e) {}
+        return "mydrive.com";
+      }
+
+      // Telegram URL placeholder — read from MYDRIVE_VIDEOS if available
+      function applyTelegram() {
+        var link = document.getElementById("telegramLink");
+        if (!link) return;
+        var url = "";
+        try {
+          if (window.MYDRIVE_VIDEOS && window.MYDRIVE_VIDEOS.telegram && window.MYDRIVE_VIDEOS.telegram.url) {
+            url = window.MYDRIVE_VIDEOS.telegram.url;
+          }
+        } catch (e) {}
+        if (!url) url = "https://t.me/yourchannel"; // placeholder
+        link.setAttribute("href", url);
+      }
+
+      function applyBranding() {
+        var name = deriveName();
+        var domain = deriveDomain();
+        Array.prototype.forEach.call(
+          document.querySelectorAll("[data-site-name]"),
+          function (el) { el.textContent = name; }
+        );
+        Array.prototype.forEach.call(
+          document.querySelectorAll("[data-email]"),
+          function (el) {
+            var user = el.getAttribute("data-email") || "contact";
+            var addr = user + "@" + domain;
+            el.textContent = addr;
+            el.setAttribute("href", "mailto:" + addr);
+          }
+        );
+        applyTelegram();
+      }
+
+      // ---------- Form handling (UI only, no backend) ----------
+      function isEmail(v) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+      }
+
+      function setInvalid(field, invalid) {
+        var el = document.querySelector('.field[data-field="' + field + '"]');
+        if (!el) return;
+        if (invalid) el.classList.add("invalid");
+        else el.classList.remove("invalid");
+      }
+
+      function validate() {
+        var name = document.getElementById("cf-name").value.trim();
+        var email = document.getElementById("cf-email").value.trim();
+        var message = document.getElementById("cf-message").value.trim();
+        var ok = true;
+        if (!name) { setInvalid("name", true); ok = false; } else setInvalid("name", false);
+        if (!isEmail(email)) { setInvalid("email", true); ok = false; } else setInvalid("email", false);
+        if (!message || message.length < 5) { setInvalid("message", true); ok = false; } else setInvalid("message", false);
+        return ok;
+      }
+
+      function bindForm() {
+        var form = document.getElementById("contactForm");
+        if (!form) return;
+        var success = document.getElementById("formSuccess");
+        var btn = document.getElementById("sendBtn");
+        var btnText = document.getElementById("sendBtnText");
+
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+          if (!validate()) return;
+          btn.disabled = true;
+          btnText.textContent = "Sending…";
+          // Simulated send — UI only
+          setTimeout(function () {
+            form.style.display = "none";
+            success.classList.add("is-visible");
+            btn.disabled = false;
+            btnText.textContent = "Send Message";
+          }, 700);
+        });
+
+        var resetBtn = document.getElementById("resetForm");
+        if (resetBtn) {
+          resetBtn.addEventListener("click", function () {
+            form.reset();
+            ["name", "email", "message"].forEach(function (f) { setInvalid(f, false); });
+            success.classList.remove("is-visible");
+            form.style.display = "";
+          });
+        }
+
+        // Clear error on input
+        ["name", "email", "message"].forEach(function (f) {
+          var input = document.getElementById("cf-" + f);
+          if (input) input.addEventListener("input", function () { setInvalid(f, false); });
+        });
+      }
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", function () { applyBranding(); bindForm(); });
+      } else {
+        applyBranding();
+        bindForm();
+      }
+    })();
+  </script>
+</body>
+</html>
