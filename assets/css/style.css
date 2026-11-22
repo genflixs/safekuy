@@ -190,20 +190,24 @@ button {
   display: none !important;
 }
 
-/* ---------- Hero Section (landing page style) ---------- */
-.hero-section {
+/* ---------- Landing Page (homepage like vidoy.asia) ---------- */
+.landing-hero {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 80px 20px 48px;
-  margin-bottom: 8px;
+  gap: 48px;
+  padding: 60px 0 48px;
+  max-width: 1000px;
+  margin: 0 auto;
   animation: fadeInUp 0.5s ease-out;
 }
 
-.hero-title {
-  font-size: 42px;
+.landing-hero-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.landing-hero-title {
+  font-size: 44px;
   font-weight: 800;
   letter-spacing: -0.03em;
   background: linear-gradient(135deg, var(--primary), var(--accent));
@@ -214,36 +218,177 @@ button {
   line-height: 1.1;
 }
 
-.hero-subtitle {
-  font-size: 18px;
+.landing-hero-subtitle {
+  font-size: 17px;
   color: var(--muted);
-  max-width: 560px;
+  line-height: 1.6;
+  margin-bottom: 28px;
+  max-width: 440px;
+}
+
+.landing-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 14px 28px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: background 0.15s ease, transform 0.15s ease;
+  box-shadow: 0 8px 24px rgba(var(--primary-rgb), 0.35);
+}
+
+.landing-cta-btn:hover {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+}
+
+.landing-cta-btn:active {
+  transform: translateY(0);
+}
+
+.landing-hero-visual {
+  flex-shrink: 0;
+  width: 340px;
+}
+
+.landing-video-preview {
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  border-radius: var(--radius-xl);
+  background: linear-gradient(135deg, var(--surface-2), var(--surface-3));
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+.landing-video-preview::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.08), transparent 60%);
+  pointer-events: none;
+}
+
+/* Features section */
+.landing-features {
+  padding: 32px 0 48px;
+  max-width: 1000px;
+  margin: 0 auto;
+  animation: fadeInUp 0.4s ease-out 0.15s both;
+}
+
+.landing-features-title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 28px;
+  color: var(--text);
+}
+
+.landing-features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.feature-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  text-align: center;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.feature-card:hover {
+  border-color: var(--primary-border);
+  transform: translateY(-2px);
+}
+
+.feature-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: rgba(var(--primary-rgb), 0.12);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.feature-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.feature-card h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+.feature-card p {
+  font-size: 13px;
+  color: var(--muted);
   line-height: 1.5;
-  font-weight: 400;
 }
 
-.content-section {
-  padding: 0 0 24px;
-  animation: fadeInUp 0.4s ease-out 0.1s both;
-}
-
-@media (max-width: 768px) {
-  .hero-section {
-    padding: 48px 16px 32px;
+/* Responsive */
+@media (max-width: 900px) {
+  .landing-hero {
+    flex-direction: column;
+    gap: 32px;
+    padding: 40px 16px 32px;
   }
 
-  .hero-title {
-    font-size: 30px;
+  .landing-hero-visual {
+    width: 240px;
   }
 
-  .hero-subtitle {
-    font-size: 15px;
+  .landing-hero-text {
+    text-align: center;
+  }
+
+  .landing-hero-subtitle {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .landing-cta-btn {
+    margin: 0 auto;
+  }
+
+  .landing-features-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .landing-hero-title {
+    font-size: 32px;
   }
 }
 
 @media (max-width: 480px) {
-  .hero-title {
+  .landing-hero-title {
     font-size: 26px;
+  }
+
+  .landing-hero-subtitle {
+    font-size: 15px;
+  }
+
+  .landing-features-title {
+    font-size: 20px;
   }
 }
 
