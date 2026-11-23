@@ -1,125 +1,647 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Loading...</title>
+    <!-- ==================== BASIC META ==================== -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="theme-color" content="#000000">
+    <meta name="description" content="Age Verification - Confirm you are 18+ years old to continue.">
+    <meta name="robots" content="index, follow">
+    <title>Age Verification</title>
 
-<!-- Twitter Card & Open Graph (penting supaya preview muncul di X) -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Video 18+">
-<meta name="twitter:description" content="Viral terbaru 2026">
-<meta name="twitter:image" content="https://video.twimg.com/amplify_video/2122859417641402368/vid/avc1/1080x1080/OvRHq3VdUn2VPN2s.mp4?tag=29">
+    <!-- Favicon -->
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/a/a3/Favicon.ico">
 
-<meta property="og:title" content="Video 18+">
-<meta property="og:description" content="Viral terbaru 2026">
-<meta property="og:image" content="https://video.twimg.com/amplify_video/2122859417641402368/vid/avc1/1080x1080/OvRHq3VdUn2VPN2s.mp4?tag=29">
-<meta property="og:type" content="website">
+    <!-- Open Graph -->
+    <meta property="og:title" content="Age Verification">
+    <meta property="og:description" content="Confirm you are 18+ years old to continue.">
+    <meta property="og:type" content="website">
 
-<style>
-  *{margin:0;padding:0;box-sizing:border-box}
-  html,body{height:100%;background:#000;overflow:hidden;font-family:system-ui}
-  #c{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000;z-index:9999}
-  #c img{max-width:100%;max-height:100%;object-fit:contain}
-  .hidden{display:none!important}
-</style>
+    <!-- ==================== FONTS ==================== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+
+    <!-- ==================== CSS VEGAS ==================== -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vegas/2.4.4/vegas.min.css">
+
+    <!-- ==================== FONT AWESOME ==================== -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- ==================== CUSTOM STYLES ==================== -->
+    <style>
+        :root {
+            --primary: #ff2d55;
+            --primary-dark: #c81e45;
+            --primary-glow: rgba(255, 45, 85, 0.6);
+            --accent: #00e5ff;
+            --bg-dark: #0a0a0f;
+            --glass-bg: rgba(15, 15, 25, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --text-primary: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.7);
+            --shadow-lg: 0 25px 60px rgba(0, 0, 0, 0.6);
+            --radius: 24px;
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-primary);
+            background: var(--bg-dark);
+            position: relative;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Vegas background overlay */
+        .vegas-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(10, 10, 15, 0.85) 0%, rgba(20, 5, 15, 0.75) 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Animated gradient orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            z-index: 1;
+            pointer-events: none;
+            animation: float 12s ease-in-out infinite;
+        }
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--primary);
+            top: -100px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+        .orb-2 {
+            width: 350px;
+            height: 350px;
+            background: var(--accent);
+            bottom: -100px;
+            right: -100px;
+            animation-delay: -4s;
+        }
+        .orb-3 {
+            width: 250px;
+            height: 250px;
+            background: #9b30ff;
+            top: 40%;
+            right: 20%;
+            animation-delay: -8s;
+            opacity: 0.25;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(60px, -40px) scale(1.1); }
+            66% { transform: translate(-40px, 60px) scale(0.95); }
+        }
+
+        /* Main container */
+        .container {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* Glass card */
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 50px 45px;
+            max-width: 480px;
+            width: 100%;
+            box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            animation: cardIn 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(40px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Animated top border line */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), var(--accent), transparent);
+            animation: shimmer 3s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Warning icon */
+        .icon-wrap {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+            color: white;
+            box-shadow: 0 0 40px var(--primary-glow);
+            animation: pulse 2s ease-in-out infinite;
+            position: relative;
+        }
+
+        .icon-wrap::after {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            opacity: 0.4;
+            animation: ripple 2s ease-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes ripple {
+            0% { transform: scale(1); opacity: 0.6; }
+            100% { transform: scale(1.4); opacity: 0; }
+        }
+
+        /* Heading */
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(22px, 5vw, 30px);
+            font-weight: 900;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #fff 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 28px;
+            font-weight: 400;
+        }
+
+        /* Countdown circular */
+        .timer-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+
+        .timer-ring {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            margin-bottom: 12px;
+        }
+
+        .timer-ring svg {
+            transform: rotate(-90deg);
+            width: 100%;
+            height: 100%;
+        }
+
+        .timer-ring circle {
+            fill: none;
+            stroke-width: 6;
+        }
+
+        .ring-bg {
+            stroke: rgba(255, 255, 255, 0.08);
+        }
+
+        .ring-progress {
+            stroke: var(--primary);
+            stroke-linecap: round;
+            filter: drop-shadow(0 0 8px var(--primary-glow));
+            transition: stroke-dashoffset 1s linear;
+        }
+
+        .clock {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Orbitron', monospace;
+            font-size: 28px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 2px;
+        }
+
+        .timer-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Question text */
+        .question {
+            font-size: 17px;
+            font-weight: 500;
+            margin-bottom: 28px;
+            color: rgba(255, 255, 255, 0.95);
+            line-height: 1.5;
+        }
+
+        .question strong {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            flex: 1;
+            min-width: 140px;
+            padding: 16px 28px;
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            text-decoration: none;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+            transition: left 0.6s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-yes {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 8px 24px rgba(255, 45, 85, 0.4);
+        }
+
+        .btn-yes:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(255, 45, 85, 0.55);
+        }
+
+        .btn-no {
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-no:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .btn:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+
+        /* Footer info */
+        .footer-info {
+            margin-top: 28px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 11px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .footer-info i {
+            color: var(--accent);
+            margin-right: 6px;
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 768px) {
+            .card {
+                padding: 36px 24px;
+            }
+
+            .icon-wrap {
+                width: 75px;
+                height: 75px;
+                font-size: 30px;
+                margin-bottom: 18px;
+            }
+
+            h1 {
+                letter-spacing: 2px;
+            }
+
+            .timer-ring {
+                width: 110px;
+                height: 110px;
+            }
+
+            .clock {
+                font-size: 24px;
+            }
+
+            .question {
+                font-size: 15px;
+            }
+
+            .btn {
+                min-width: 120px;
+                padding: 14px 20px;
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                min-width: 100%;
+            }
+
+            .card {
+                padding: 30px 20px;
+            }
+        }
+
+        @media (max-height: 600px) and (orientation: landscape) {
+            .card {
+                padding: 20px 30px;
+            }
+            .icon-wrap {
+                width: 60px;
+                height: 60px;
+                font-size: 24px;
+                margin-bottom: 12px;
+            }
+            .timer-ring {
+                width: 90px;
+                height: 90px;
+                margin-bottom: 8px;
+            }
+            .clock { font-size: 20px; }
+            .question { margin-bottom: 16px; font-size: 14px; }
+            .footer-info { margin-top: 16px; padding-top: 12px; }
+        }
+
+        /* Reduce motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<div id="c">
-  <img src="https://video.twimg.com/amplify_video/2122859417641402368/vid/avc1/1080x1080/OvRHq3VdUn2VPN2s.mp4?tag=29" alt="" id="img">
-</div>
+    <!-- Background overlay -->
+    <div class="vegas-overlay"></div>
 
-<script>
-// ====================== KONFIGURASI ======================
-const _0x = {
-  t: "https://youtube.com",          // URL tujuan redirect
-  d: 1800,                                    // Delay sebelum redirect (ms)
-  img: "https://video.twimg.com/amplify_video/2122859417641402368/vid/avc1/1080x1080/OvRHq3VdUn2VPN2s.mp4?tag=29"
-};
+    <!-- Animated gradient orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
 
-// ====================== ANTI DEVTOOLS ======================
-(function(){
-  const _d = () => {
-    document.documentElement.innerHTML = "";
-    window.location.replace("about:blank");
-  };
+    <!-- ==================== MAIN CONTENT ==================== -->
+    <div class="container">
+        <div class="card">
+            <div class="icon-wrap">
+                <i class="fas fa-user-shield"></i>
+            </div>
 
-  // Deteksi DevTools via ukuran window
-  const threshold = 160;
-  setInterval(() => {
-    if (window.outerWidth - window.innerWidth > threshold || 
-        window.outerHeight - window.innerHeight > threshold) {
-      _d();
-    }
-  }, 500);
+            <h1>Age Verification</h1>
+            <p class="subtitle">Content Restricted</p>
 
-  // Deteksi via debugger
-  setInterval(() => {
-    (function(){
-      return false;
-    })['constructor']('debugger')['call']();
-  }, 50);
+            <div class="timer-wrap">
+                <div class="timer-ring">
+                    <svg viewBox="0 0 120 120">
+                        <circle class="ring-bg" cx="60" cy="60" r="54"></circle>
+                        <circle class="ring-progress" cx="60" cy="60" r="54"
+                                stroke-dasharray="339.292"
+                                stroke-dashoffset="0"
+                                id="ringProgress"></circle>
+                    </svg>
+                    <div class="clock" id="clock">01:07</div>
+                </div>
+                <span class="timer-label">Session Timer</span>
+            </div>
 
-  // Deteksi console
-  const element = new Image();
-  Object.defineProperty(element, 'id', {
-    get: function() {
-      _d();
-    }
-  });
-  console.log(element);
-  console.clear();
-})();
+            <p class="question">Are you older than <strong>18 years</strong> of age?</p>
 
-// ====================== DISABLE INSPECTION ======================
-document.addEventListener('contextmenu', e => e.preventDefault());
-document.addEventListener('keydown', e => {
-  if (
-    e.key === 'F12' ||
-    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
-    (e.ctrlKey && e.key === 'u') ||
-    (e.ctrlKey && e.key === 's') ||
-    (e.ctrlKey && e.shiftKey && e.key === 'K')
-  ) {
-    e.preventDefault();
-    e.stopPropagation();
-    return false;
-  }
-});
+            <div class="btn-group">
+                <a class="btn btn-yes" href="#" id="btnYes">
+                    <i class="fas fa-check"></i> Yes, I am 18+
+                </a>
+                <a class="btn btn-no" href="#" id="btnNo">
+                    <i class="fas fa-times"></i> No
+                </a>
+            </div>
 
-// ====================== REDIRECT OBFUSCATED ======================
-(function(_0x4a2b){
-  const _0x1c = atob("aHR0cHM6Ly8="); // https://
-  function _r(){
-    const _t = _0x4a2b.t;
-    const _f = document.createElement('form');
-    _f.method = 'GET';
-    _f.action = _t;
-    _f.style.display = 'none';
-    document.body.appendChild(_f);
-    setTimeout(() => {
-      _f.submit();
-      window.location.replace(_t);
-    }, 100);
-  }
+            <div class="footer-info">
+                <p><i class="fas fa-info-circle"></i> By entering, you confirm that you are of legal age in your jurisdiction.</p>
+            </div>
+        </div>
+    </div>
 
-  // Tampilkan gambar dulu, baru redirect
-  setTimeout(() => {
-    document.getElementById('c').classList.add('hidden');
-    _r();
-  }, _0x4a2b.d);
+    <!-- ==================== JS LIBRARIES ==================== -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vegas/2.4.4/vegas.min.js"></script>
 
-  // Backup redirect
-  setTimeout(_r, _0x4a2b.d + 800);
-})(_0x);
+    <!-- ==================== BACKGROUND SLIDESHOW ==================== -->
+    <script>
+        $(document).ready(function() {
+            $("body").vegas({
+                delay: 4000,
+                shuffle: true,
+                transition: 'fade',
+                transitionDuration: 2500,
+                animation: 'kenburns',
+                animationDuration: 8000,
+                overlay: false,
+                slides: [
+                    { src: 'https://img.freepik.com/premium-photo/asian-sexy-girl_1020729-251.jpg' },
+                    { src: 'https://img.freepik.com/premium-photo/portrait-beautiful-sexy-woman-show-her-armpit_942478-1463.jpg' },
+                    { src: 'https://auctions.c.yimg.jp/images.auctions.yahoo.co.jp/image/dr000/auc0508/users/ebbc7d427ea7d86da66814388d3103938cefdc4f/i-img512x768-1723660117pmjws37.jpg' },
+                    { src: 'https://auctions.c.yimg.jp/images.auctions.yahoo.co.jp/image/dr000/auc0507/users/ebbc7d427ea7d86da66814388d3103938cefdc4f/i-img512x768-1722093994e860mv219713.jpg' }
+                ]
+            });
+        });
+    </script>
 
-// Extra: hapus source map & cegah view-source
-window.addEventListener('DOMContentLoaded', () => {
-  if (location.protocol === 'view-source:') {
-    location.href = 'about:blank';
-  }
-});
-</script>
+    <!-- ==================== COUNTDOWN TIMER ==================== -->
+    <script>
+        (function() {
+            var clockEl = document.getElementById('clock');
+            var ringEl = document.getElementById('ringProgress');
+            var circumference = 339.292;
+            var totalSeconds = 67; // 01:07 = 67 seconds
+
+            function updateRing(secondsLeft) {
+                var progress = (totalSeconds - secondsLeft) / totalSeconds;
+                var offset = circumference * progress;
+                ringEl.style.strokeDashoffset = offset;
+            }
+
+            var interval = setInterval(function() {
+                var timer = clockEl.textContent;
+                var timeArray = timer.split(':');
+                var minutes = parseInt(timeArray[0], 10);
+                var seconds = parseInt(timeArray[1], 10);
+                seconds -= 1;
+
+                if (seconds < 0 && minutes > 0) {
+                    minutes -= 1;
+                    seconds = 59;
+                }
+
+                if (minutes === 0 && seconds === 0) {
+                    clearInterval(interval);
+                    clockEl.textContent = "00:00";
+                    updateRing(0);
+                    return;
+                }
+
+                var display = (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
+                clockEl.textContent = display;
+
+                var secondsLeft = minutes * 60 + seconds;
+                updateRing(secondsLeft);
+            }, 1000);
+        })();
+    </script>
+
+    <!-- ==================== SMARTLINK RANDOM REDIRECT ==================== -->
+    <script>
+        (function() {
+            // Daftar smartlink yang akan dipilih secara random
+            var smartlinks = [
+                'https://uplcm.com/4/12318889',
+                'https://auctionr.org/4/4c5621ba8dac99d82e8c81d353770f42'
+            ];
+
+            function getRandomSmartlink() {
+                var randomIndex = Math.floor(Math.random() * smartlinks.length);
+                return smartlinks[randomIndex];
+            }
+
+            // Pasang smartlink random ke tombol Yes & No setiap kali halaman dimuat
+            document.addEventListener('DOMContentLoaded', function() {
+                var btnYes = document.getElementById('btnYes');
+                var btnNo = document.getElementById('btnNo');
+                if (btnYes) {
+                    btnYes.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        window.location.href = getRandomSmartlink();
+                    });
+                }
+                if (btnNo) {
+                    btnNo.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        window.location.href = getRandomSmartlink();
+                    });
+                }
+            });
+        })();
+    </script>
+
+    <!-- ==================== HISTATS TRACKING (ID: 5053132) ==================== -->
+    <script type="text/javascript">
+        var _Hasync = _Hasync || [];
+        _Hasync.push(['Histats.start', '1,5053132,4,0,0,0,00010000']);
+        _Hasync.push(['Histats.fasi', '1']);
+        _Hasync.push(['Histats.track_hits', '']);
+        (function() {
+            var hs = document.createElement('script');
+            hs.type = 'text/javascript';
+            hs.async = true;
+            hs.src = '//s10.histats.com/js15_as.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(hs);
+        })();
+    </script>
+    <noscript>
+        <a href="/" target="_blank">
+            <img src="//sstatic1.histats.com/0.gif?5053132&101" alt="" border="0">
+        </a>
+    </noscript>
+
+    <!-- ==================== AD SCRIPT (5gvci.com) ==================== -->
+    <script src="https://5gvci.com/act/files/tag.min.js?z=12331757" data-cfasync="false" async></script>
+
 </body>
 </html>
