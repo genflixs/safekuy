@@ -795,67 +795,67 @@
     const cfg = state.config;
     const vcfg = window.MYDRIVE_VIDEOS || {};
 
-    // Title
     const siteName = cfg.site.name || (window.location.hostname ? window.location.hostname.split('.')[0] : 'MyDrive');
     document.title = `${siteName} | Streaming HD Free`;
 
-    // Breadcrumb hidden on landing page
     renderBreadcrumb([]);
     els.breadcrumb.hidden = true;
-
-    // Home mode: center brand, hide search
     els.topbar.classList.add('home-mode');
     els.searchBox.hidden = true;
     els.sortBox.hidden = true;
 
-    // Hero values
     const heroTitle = vcfg.hero_title || 'Stream. Watch. Enjoy.';
     const heroSubtitle = vcfg.hero_subtitle || 'HD video streaming, completely free. Watch premium content anytime, anywhere.';
 
-    // Landing page (no folders shown — folders accessible via /x)
     els.app.innerHTML = `
-      <section class="landing-hero">
-        <div class="landing-hero-text">
-          <h1 class="landing-hero-title">${utils.esc(heroTitle)}</h1>
-          <p class="landing-hero-subtitle">${utils.esc(heroSubtitle)}</p>
-          <a href="/x" class="landing-cta-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            Browse Content
-          </a>
+      <div class="landing">
+        <div class="landing-top">
+          <h1 class="landing-title">${utils.esc(heroTitle)}</h1>
+          <p class="landing-desc">${utils.esc(heroSubtitle)}</p>
         </div>
-        <div class="landing-hero-visual">
-          <div class="landing-video-preview">
-            <svg viewBox="0 0 24 24" fill="currentColor" style="width:48px;height:48px;color:rgba(255,255,255,0.9)"><path d="M8 5v14l11-7z"/></svg>
-          </div>
-        </div>
-      </section>
-
-      <section class="landing-features">
-        <h2 class="landing-features-title">Made for viewers</h2>
-        <div class="landing-features-grid">
-          <div class="feature-card">
-            <div class="feature-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+        <div class="landing-cols">
+          <div class="landing-video">
+            <div class="landing-video-inner">
+              <svg viewBox="0 0 24 24" fill="currentColor" style="width:56px;height:56px;color:rgba(255,255,255,0.85)"><path d="M8 5v14l11-7z"/></svg>
             </div>
-            <h3>HD Streaming</h3>
-            <p>Watch all content in high definition quality, smooth playback on any connection.</p>
           </div>
-          <div class="feature-card">
-            <div class="feature-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          <div class="landing-card">
+            <div class="landing-card-tabs">
+              <span class="tab active">Welcome</span>
             </div>
-            <h3>Fast & Free</h3>
-            <p>No registration required. Instant access to all content. Completely free forever.</p>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            <div class="landing-card-body">
+              <div class="landing-card-field">
+                <div class="landing-card-input"></div>
+              </div>
+              <div class="landing-card-field">
+                <div class="landing-card-input"></div>
+              </div>
+              <div class="landing-card-btn"></div>
+              <div class="landing-card-links">
+                <span></span>
+                <span></span>
+              </div>
             </div>
-            <h3>Multi-Device</h3>
-            <p>Works perfectly on desktop, tablet, and mobile. Stream anywhere, anytime.</p>
           </div>
         </div>
-      </section>
+        <div class="landing-features">
+          <h2 class="landing-features-title">Made for creators</h2>
+          <div class="landing-features-grid">
+            <div class="feature-card">
+              <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+              <h3>Upload Videos</h3><p>Share your content with the world. Unlimited storage, no limits.</p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+              <h3>Track Performance</h3><p>Monitor views, engagement, and growth in real-time.</p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+              <h3>Earn Revenue</h3><p>Monetize your content and earn from every view.</p>
+            </div>
+          </div>
+        </div>
+      </div>
     `;
   }
 
